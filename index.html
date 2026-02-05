@@ -8,51 +8,56 @@
     <style>
         :root {
             --primary-red: #d90429;
-            --soft-white: rgba(255, 255, 255, 0.9);
+            --soft-white: rgba(255, 255, 255, 0.85);
         }
 
+        /* Forces content to the edges of the screen */
         html, body {
             margin: 0; padding: 0;
-            width: 100%; height: 100%;
+            width: 100vw; height: 100vh;
             overflow: hidden;
             background-color: #000;
-            touch-action: manipulation; /* Prevents double-tap zoom delay */
+            touch-action: manipulation;
         }
 
+        /* Full Screen Aspect Ratio Background */
         #bg-image {
             position: fixed; top: 0; left: 0;
-            width: 100vw; height: 100vh;
+            width: 100%; height: 100%;
             background-image: url('us-main.jpg');
-            background-size: cover; background-position: center;
-            filter: blur(8px) brightness(0.8);
+            background-size: cover; /* Fills screen aspect ratio */
+            background-position: center center;
+            filter: blur(8px) brightness(0.7);
             z-index: -2;
             transition: background-image 0.8s ease-in-out;
         }
 
         .white-overlay {
             position: fixed; top: 0; left: 0;
-            width: 100vw; height: 100vh;
+            width: 100%; height: 100%;
             background: rgba(255, 255, 255, 0.3);
             z-index: -1;
         }
 
         .main-container {
             display: flex; justify-content: center; align-items: center;
-            width: 100vw; height: 100vh;
+            width: 100%; height: 100%;
         }
 
         .content-card {
             background: var(--soft-white);
             backdrop-filter: blur(15px);
             padding: 2rem; border-radius: 30px;
-            box-shadow: 0 15px 45px rgba(0,0,0,0.3);
+            box-shadow: 0 15px 45px rgba(0,0,0,0.4);
             max-width: 400px; width: 85%;
             border: 1px solid rgba(255,255,255,0.5);
             position: relative; text-align: center;
         }
 
+        /* Internal image also follows aspect ratio cover */
         .display-photo {
-            width: 100%; height: 240px; object-fit: cover;
+            width: 100%; height: 240px; 
+            object-fit: cover; /* Ensures inner photo looks professional */
             border-radius: 20px; margin-bottom: 1.2rem;
         }
 
@@ -68,13 +73,12 @@
         }
 
         .btn {
-            padding: 15px 30px; /* Bigger buttons for mobile thumbs */
-            font-size: 1.1rem; font-weight: 600;
+            padding: 15px 30px; font-size: 1.1rem; font-weight: 600;
             border-radius: 50px; border: none; cursor: pointer;
             -webkit-tap-highlight-color: transparent;
         }
 
-        #yesBtn { background: var(--primary-red); color: white; position: relative; z-index: 100; }
+        #yesBtn { background: var(--primary-red); color: white; z-index: 100; }
         #noBtn { background: #e9ecef; color: #495057; position: relative; z-index: 50; }
 
         #smartPopup {
@@ -85,7 +89,7 @@
             width: 80%; font-weight: 600;
         }
 
-        .telugu-msg { font-size: 1.2rem; margin-top: 1rem; line-height: 1.5; color: #333; }
+        .telugu-msg { font-size: 1.3rem; margin-top: 1rem; line-height: 1.5; color: #333; }
         .heart-particle { position: fixed; pointer-events: none; animation: floatUp 4s linear forwards; }
 
         @keyframes floatUp {
@@ -129,8 +133,8 @@
             { photo: 'me.jpg', question: 'Last warning, click Yes! 😤' }
         ];
 
-        // "No" click handling (Works for both mobile and desktop)
-        noBtn.addEventListener('click', (e) => {
+        // "No" click handling
+        noBtn.addEventListener('click', () => {
             if (currentStep < 3) {
                 const step = contentSteps[currentStep];
                 mainPhoto.src = step.photo;
@@ -145,10 +149,9 @@
             }
         });
 
-        // Runaway logic (Optimized for Mobile)
+        // Runaway logic constrained to the center card
         const moveButton = (e) => {
             if (currentStep === 3) {
-                // If it's a touch event, we stop the click from happening
                 if (e.type === 'touchstart') {
                     noAvoidCount++;
                     if (noAvoidCount >= 2) {
@@ -168,19 +171,18 @@
             }
         };
 
-        // Separate listeners for Desktop and Mobile
         noBtn.addEventListener('mouseover', moveButton);
         noBtn.addEventListener('touchstart', moveButton);
 
-        // "Yes" button handling
+        // "Yes" button final animation
         yesBtn.addEventListener('click', () => {
             card.innerHTML = `
-                <img src="us-final.jpg" class="display-photo">
+                <img src="us-final.jpg" class="display-photo" style="object-fit: cover;">
                 <h1>I Knew It! ❤️</h1>
                 <p class="telugu-msg">నాకు తెలుసు నువ్వు నాకు నో చెప్పలేవని... <br> <strong>I Love You!</strong></p>
             `;
             bgImage.style.backgroundImage = "url('us-final.jpg')";
-            bgImage.style.filter = "blur(12px) brightness(0.7)";
+            bgImage.style.filter = "blur(12px) brightness(0.6)";
             startHearts();
         });
 
