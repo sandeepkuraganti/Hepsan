@@ -45,11 +45,9 @@
 
         .main-container {
             display: flex;
-            flex-direction: column;
             justify-content: center;
             align-items: center;
             height: 100vh;
-            text-align: center;
             padding: 20px;
         }
 
@@ -62,7 +60,8 @@
             max-width: 450px;
             width: 90%;
             border: 1px solid rgba(255,255,255,0.5);
-            transition: all 0.3s ease;
+            position: relative; /* Essential for relative button movement */
+            text-align: center;
         }
 
         .display-photo {
@@ -71,7 +70,6 @@
             object-fit: cover;
             border-radius: 20px;
             margin-bottom: 1.5rem;
-            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
         }
 
         h1 {
@@ -80,9 +78,6 @@
             font-size: 2.2rem;
             margin: 10px 0;
             min-height: 80px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
         }
 
         .btn-group {
@@ -91,7 +86,6 @@
             justify-content: center;
             gap: 20px;
             min-height: 60px;
-            position: relative;
         }
 
         .btn {
@@ -101,34 +95,31 @@
             border-radius: 50px;
             border: none;
             cursor: pointer;
-            transition: background-color 0.3s, transform 0.2s, color 0.3s;
+            transition: background-color 0.3s, transform 0.2s;
         }
 
         #yesBtn {
             background: var(--primary-red);
             color: white;
-            box-shadow: 0 4px 15px rgba(217, 4, 41, 0.3);
-            z-index: 10;
         }
 
         #noBtn {
             background: #e9ecef;
             color: #495057;
-            z-index: 5;
+            position: relative; /* Relative inside the group initially */
+            transition: all 0.1s ease; /* Faster jump response */
         }
 
         .telugu-msg {
             font-size: 1.3rem;
             margin-top: 1rem;
             line-height: 1.6;
-            color: #2b2d42;
         }
 
         .heart-particle {
             position: fixed;
             pointer-events: none;
             animation: floatUp 4s linear forwards;
-            z-index: 100;
         }
 
         @keyframes floatUp {
@@ -147,7 +138,7 @@
             <img src="us-main.jpg" id="mainPhoto" class="display-photo">
             <h1 id="question">Will you be my Valentine?</h1>
             
-            <div class="btn-group" id="btnContainer">
+            <div class="btn-group">
                 <button class="btn" id="yesBtn">Yes!</button>
                 <button class="btn" id="noBtn">No</button>
             </div>
@@ -158,26 +149,17 @@
         let currentStep = 0;
         const noBtn = document.getElementById('noBtn');
         const yesBtn = document.getElementById('yesBtn');
+        const card = document.getElementById('card');
         const questionText = document.getElementById('question');
         const mainPhoto = document.getElementById('mainPhoto');
         const bgImage = document.getElementById('bg-image');
 
         const contentSteps = [
-            {
-                photo: 'us-recent.jpg',
-                question: 'Dont you want to be my Valentine? 😢',
-            },
-            {
-                photo: 'us-first.jpg',
-                question: 'Still dont want to be my Valentine?',
-            },
-            {
-                photo: 'me.jpg',
-                question: 'Last warning, click Yes! 😤',
-            }
+            { photo: 'us-recent.jpg', question: 'Dont you want to be my Valentine? 😢' },
+            { photo: 'us-first.jpg', question: 'Still dont want to be my Valentine?' },
+            { photo: 'me.jpg', question: 'Last warning, click Yes! 😤' }
         ];
 
-        // "No" Button Click Logic
         noBtn.addEventListener('click', () => {
             if (currentStep < contentSteps.length) {
                 const step = contentSteps[currentStep];
@@ -187,37 +169,37 @@
                 
                 currentStep++;
 
-                // Check if we just entered the LAST step (the one showing your photo)
                 if (currentStep === 3) {
-                    noBtn.style.backgroundColor = "#d90429"; // Make background RED
-                    noBtn.style.color = "white"; // Make text white for contrast
+                    noBtn.style.backgroundColor = "#d90429";
+                    noBtn.style.color = "white";
                 }
             }
         });
 
-        // "No" Button Runaway Logic (Only active on last step)
-        const moveButton = (e) => {
+        // Moves the button ONLY within the bounds of the card
+        const moveButton = () => {
             if (currentStep === 3) {
-                const padding = 20;
-                // Calculate random position while keeping button on screen
-                const x = Math.random() * (window.innerWidth - noBtn.offsetWidth - padding * 2) + padding;
-                const y = Math.random() * (window.innerHeight - noBtn.offsetHeight - padding * 2) + padding;
+                const cardRect = card.getBoundingClientRect();
+                const btnWidth = noBtn.offsetWidth;
+                const btnHeight = noBtn.offsetHeight;
+
+                // Calculate random position restricted to the card boundaries
+                // We use absolute positioning relative to the card
+                const x = Math.random() * (cardRect.width - btnWidth);
+                const y = Math.random() * (cardRect.height - btnHeight);
                 
-                noBtn.style.position = 'fixed';
+                noBtn.style.position = 'absolute';
                 noBtn.style.left = `${x}px`;
                 noBtn.style.top = `${y}px`;
+                noBtn.style.margin = '0';
             }
         };
 
         noBtn.addEventListener('mouseover', moveButton);
-        noBtn.addEventListener('touchstart', (e) => {
-            e.preventDefault(); // Prevents clicking on mobile while it moves
-            moveButton();
-        });
+        noBtn.addEventListener('touchstart', (e) => { e.preventDefault(); moveButton(); });
 
-        // "Yes" Button Final Logic
         yesBtn.addEventListener('click', () => {
-            document.getElementById('card').innerHTML = `
+            card.innerHTML = `
                 <img src="us-final.jpg" class="display-photo">
                 <h1>I Knew It! ❤️</h1>
                 <p class="telugu-msg">నాకు తెలుసు నువ్వు నాకు నో చెప్పలేవని... <br> <strong>I Love You!</strong></p>
