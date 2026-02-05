@@ -119,7 +119,7 @@
 
     <div id="loginScreen">
         <div class="login-card">
-            <h2>Our Secret Date ❤️</h2>
+            <h2>Our First Date ❤️</h2>
             <p>Enter our special 4-digit code to unlock</p>
             <input type="password" id="pinInput" placeholder="0000" maxlength="4" pattern="\d*">
             <button class="btn" id="unlockBtn" style="background: var(--primary-red); color: white; width: 100%;">Unlock</button>
@@ -130,7 +130,7 @@
     <div id="smartPopup">Dont act smart! <br> You only have option that is YES! 😉</div>
 
     <div class="ui-layer" id="mainUI">
-        <h1 id="question">Will you be my Valentine?</h1>
+        <h1 id="question">Will you be my Valentine? I know you can't click NO</h1>
         <div class="telugu-msg" id="subText">నువ్వు నా వాలెంటైన్ అవుతావా?</div>
         
         <div class="btn-group" id="btnGroup">
@@ -172,9 +172,9 @@
         const popup = document.getElementById('smartPopup');
 
         const contentSteps = [
-            { photo: 'us-recent.jpg', question: 'Dont you want to be my Valentine? 😢', telugu: 'నీకు ఇష్టం లేదా?' },
-            { photo: 'us-first.jpg', question: 'Still dont want to be my Valentine?', telugu: 'మళ్ళీ ఆలోచించు...' },
-            { photo: 'me.jpg', question: 'Last warning, click Yes! 😤', telugu: 'ఇది ఆఖరి హెచ్చరిక!' }
+            { photo: 'us-recent.jpg', question: 'Dont you want to be my Valentine? Are serious Hepsiba😢', telugu: 'నీకు ఇష్టం లేదా?' },
+            { photo: 'us-first.jpg', question: 'Still dont want to be my Valentine? Stop acting and accept me', telugu: 'మళ్ళీ ఆలోచించు...' },
+            { photo: 'me.jpg', question: 'Last warning, click Yes! Enough is enough 😤', telugu: 'ఇది ఆఖరి హెచ్చరిక!' }
         ];
 
         noBtn.addEventListener('click', () => {
