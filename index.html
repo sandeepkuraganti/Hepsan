@@ -56,9 +56,10 @@
         .btn-group {
             display: flex;
             justify-content: center;
+            align-items: center;
             gap: 20px;
-            position: relative;
-            height: 50px;
+            min-height: 60px;
+            position: relative; /* This keeps buttons contained initially */
         }
 
         button {
@@ -68,18 +69,19 @@
             border-radius: 10px;
             cursor: pointer;
             transition: transform 0.2s;
+            z-index: 1;
         }
 
-       #yesBtn {
-    background-color: var(--primary-pink);
-    color: white;
-}
+        #yesBtn {
+            background-color: var(--primary-pink);
+            color: white;
+        }
 
-#noBtn {
-    background-color: #ccc;
-    color: #333;
-    /* Remove 'position: absolute' from here so it stays in line at first */
-}
+        #noBtn {
+            background-color: #ccc;
+            color: #333;
+            /* Removed absolute positioning so it starts next to Yes */
+        }
 
         .celebration-hidden {
             display: none;
@@ -129,15 +131,18 @@
         const questionUI = document.getElementById('question-ui');
         const answerUI = document.getElementById('answer-ui');
 
-        // Move "No" button on hover
-        noBtn.addEventListener('mouseover', () => {
+        // Move "No" button on hover/touch
+        const moveButton = () => {
             const x = Math.random() * (window.innerWidth - noBtn.offsetWidth);
             const y = Math.random() * (window.innerHeight - noBtn.offsetHeight);
             
+            noBtn.style.position = 'fixed'; // Switch to fixed ONLY when moving
             noBtn.style.left = `${x}px`;
             noBtn.style.top = `${y}px`;
-            noBtn.style.position = 'fixed';
-        });
+        };
+
+        noBtn.addEventListener('mouseover', moveButton);
+        noBtn.addEventListener('touchstart', moveButton);
 
         // Handle "Yes" click
         yesBtn.addEventListener('click', () => {
