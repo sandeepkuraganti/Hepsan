@@ -3,208 +3,205 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Our Love Story ❤️</title>
+    <title>For My Valentine ❤️</title>
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
         :root {
-            --deep-red: #c9184a;
-            --hot-pink: #ff4d6d;
-            --glass-white: rgba(255, 255, 255, 0.25);
-            --text-color: #2b2d42;
+            --primary-red: #d90429;
+            --soft-white: rgba(255, 255, 255, 0.85);
         }
 
-        body {
+        body, html {
             margin: 0;
-            min-height: 100vh;
+            padding: 0;
+            height: 100%;
+            font-family: 'Montserrat', sans-serif;
+            overflow: hidden;
+        }
+
+        /* The blurred background effect */
+        #bg-image {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('us-main.jpg');
+            background-size: cover;
+            background-position: center;
+            filter: blur(8px);
+            z-index: -2;
+            transition: background-image 0.5s ease-in-out;
+        }
+
+        /* The professional white overlay */
+        .white-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.4);
+            z-index: -1;
+        }
+
+        .main-container {
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
-            background: linear-gradient(45deg, #ffafbd, #ffc3a0, #ffafbd);
-            background-size: 400% 400%;
-            animation: gradientBG 15s ease infinite;
-            font-family: 'Montserrat', sans-serif;
-            overflow-x: hidden;
-        }
-
-        @keyframes gradientBG {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-
-        .container {
-            background: var(--glass-white);
-            backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            border-radius: 30px;
-            padding: 3rem 2rem;
-            width: 90%;
-            max-width: 500px;
-            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.2);
+            height: 100vh;
             text-align: center;
-            z-index: 10;
+            padding: 20px;
         }
 
-        .couple-photo {
-            width: 180px;
-            height: 180px;
-            border-radius: 50%;
-            border: 5px solid white;
+        .content-card {
+            background: var(--soft-white);
+            backdrop-filter: blur(10px);
+            padding: 2.5rem;
+            border-radius: 30px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            max-width: 450px;
+            width: 90%;
+            border: 1px solid rgba(255,255,255,0.5);
+        }
+
+        .display-photo {
+            width: 100%;
+            height: 250px;
             object-fit: cover;
+            border-radius: 20px;
             margin-bottom: 1.5rem;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
         }
 
         h1 {
             font-family: 'Dancing Script', cursive;
-            color: var(--deep-red);
-            font-size: 3.5rem;
-            margin: 0;
-        }
-
-        .sub-text {
-            font-size: 1.1rem;
-            color: var(--text-color);
-            margin-bottom: 2rem;
-            font-weight: 300;
-        }
-
-        .telugu-romantic {
-            font-size: 1.3rem;
-            color: var(--deep-red);
-            display: block;
-            margin-bottom: 2rem;
+            color: var(--primary-red);
+            font-size: 2.5rem;
+            margin: 10px 0;
         }
 
         .btn-group {
+            margin-top: 2rem;
             display: flex;
             justify-content: center;
-            gap: 25px;
-            align-items: center;
-            height: 60px;
+            gap: 20px;
+            min-height: 50px;
         }
 
         .btn {
             padding: 12px 35px;
-            font-size: 1rem;
+            font-size: 1.1rem;
             font-weight: 600;
             border-radius: 50px;
             border: none;
             cursor: pointer;
             transition: all 0.3s ease;
-            text-transform: uppercase;
-            letter-spacing: 1px;
         }
 
         #yesBtn {
-            background: var(--hot-pink);
+            background: var(--primary-red);
             color: white;
-            box-shadow: 0 4px 15px rgba(255, 77, 109, 0.4);
-        }
-
-        #yesBtn:hover {
-            transform: scale(1.1);
-            background: var(--deep-red);
+            box-shadow: 0 4px 15px rgba(217, 4, 41, 0.3);
         }
 
         #noBtn {
-            background: #f8f9fa;
-            color: #6c757d;
+            background: #e9ecef;
+            color: #495057;
+            position: relative;
         }
 
-        /* Success View */
-        .celebration-hidden { display: none; }
-        
-        .gallery {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-            margin-top: 2rem;
-        }
-
-        .gallery img {
-            width: 100%;
-            height: 120px;
-            object-fit: cover;
-            border-radius: 15px;
-        }
-
-        .heart {
-            position: fixed;
-            pointer-events: none;
-            z-index: 5;
-            animation: floatUp 4s linear forwards;
-        }
-
-        @keyframes floatUp {
-            0% { transform: translateY(100vh) scale(0); opacity: 1; }
-            100% { transform: translateY(-10vh) scale(1.5); opacity: 0; }
+        /* Telugu text styling */
+        .telugu-msg {
+            font-size: 1.2rem;
+            margin-top: 1rem;
+            line-height: 1.6;
         }
     </style>
 </head>
 <body>
 
-    <div class="container" id="mainCard">
-        <div id="questionView">
-            <img src="https://images.unsplash.com/photo-1518199266791-5375a83190b7?auto=format&fit=crop&q=80&w=400" alt="Us" class="couple-photo">
-            
-            <h1>Be Mine?</h1>
-            <p class="sub-text">Every moment with you is a gift.</p>
-            <span class="telugu-romantic">నీతో గడిపే ప్రతి క్షణం ఒక జ్ఞాపకం.</span>
+    <div id="bg-image"></div>
+    <div class="white-overlay"></div>
+
+    <div class="main-container">
+        <div class="content-card" id="card">
+            <img src="us-main.jpg" id="mainPhoto" class="display-photo">
+            <h1 id="question">Will you be my Valentine?</h1>
             
             <div class="btn-group">
                 <button class="btn" id="yesBtn">Yes!</button>
                 <button class="btn" id="noBtn">No</button>
             </div>
         </div>
-
-        <div id="successView" class="celebration-hidden">
-            <h1>I Knew It! ❤️</h1>
-            <p class="sub-text">You just made me the happiest person!</p>
-            
-            <div class="gallery">
-                <img src="https://images.unsplash.com/photo-1511739001486-6bfe10ce785f?auto=format&fit=crop&q=80&w=200" alt="Memory 1">
-                <img src="https://images.unsplash.com/photo-1494774157365-9e04c6720e47?auto=format&fit=crop&q=80&w=200" alt="Memory 2">
-            </div>
-            <p style="margin-top: 2rem; font-weight: 600;">నువ్వు నా ప్రపంచం!</p>
-        </div>
     </div>
 
     <script>
+        let currentStep = 0;
         const noBtn = document.getElementById('noBtn');
         const yesBtn = document.getElementById('yesBtn');
-        const questionView = document.getElementById('questionView');
-        const successView = document.getElementById('successView');
+        const questionText = document.getElementById('question');
+        const mainPhoto = document.getElementById('mainPhoto');
+        const bgImage = document.getElementById('bg-image');
 
-        const moveNoButton = () => {
-            const x = Math.random() * (window.innerWidth - noBtn.offsetWidth);
-            const y = Math.random() * (window.innerHeight - noBtn.offsetHeight);
-            noBtn.style.position = 'fixed';
-            noBtn.style.left = `${x}px`;
-            noBtn.style.top = `${y}px`;
-        };
+        const contentSteps = [
+            {
+                photo: 'us-recent.jpg',
+                question: 'Dont you want to be my Valentine? 😢',
+                run: false
+            },
+            {
+                photo: 'us-first.jpg',
+                question: 'Still dont want to be my Valentine?',
+                run: false
+            },
+            {
+                photo: 'me.jpg',
+                question: 'Last warning, click Yes! 😤',
+                run: true
+            }
+        ];
 
-        noBtn.addEventListener('mouseover', moveNoButton);
-        noBtn.addEventListener('touchstart', moveNoButton);
-
-        yesBtn.addEventListener('click', () => {
-            questionView.classList.add('celebration-hidden');
-            successView.classList.remove('celebration-hidden');
-            createHearts();
+        // "No" Button Logic
+        noBtn.addEventListener('click', () => {
+            if (currentStep < contentSteps.length) {
+                const step = contentSteps[currentStep];
+                mainPhoto.src = step.photo;
+                questionText.innerText = step.question;
+                
+                // Keep the background slightly synced
+                bgImage.style.backgroundImage = `url('${step.photo}')`;
+                
+                currentStep++;
+            }
         });
 
-        function createHearts() {
-            setInterval(() => {
-                const heart = document.createElement('div');
-                heart.className = 'heart';
-                heart.innerHTML = '❤️';
-                heart.style.left = Math.random() * 100 + 'vw';
-                heart.style.fontSize = (Math.random() * 20 + 20) + 'px';
-                document.body.appendChild(heart);
-                setTimeout(() => heart.remove(), 4000);
-            }, 150);
-        }
+        // "No" Button Runaway Logic
+        const moveButton = () => {
+            if (currentStep === 3) { // Only run on the "Last Warning" step
+                const x = Math.random() * (window.innerWidth - noBtn.offsetWidth);
+                const y = Math.random() * (window.innerHeight - noBtn.offsetHeight);
+                noBtn.style.position = 'fixed';
+                noBtn.style.left = `${x}px`;
+                noBtn.style.top = `${y}px`;
+            }
+        };
+
+        noBtn.addEventListener('mouseover', moveButton);
+        noBtn.addEventListener('touchstart', moveButton);
+
+        // "Yes" Button Logic
+        yesBtn.addEventListener('click', () => {
+            document.getElementById('card').innerHTML = `
+                <img src="us-final.jpg" class="display-photo">
+                <h1>I Knew It! ❤️</h1>
+                <p class="telugu-msg">నాకు తెలుసు నువ్వు నాకు నో చెప్పలేవని... <br> <strong>I Love You!</strong></p>
+            `;
+            // Reset background to a clean happy look
+            bgImage.style.backgroundImage = "url('us-final.jpg')";
+            bgImage.style.filter = "blur(4px)";
+        });
     </script>
 </body>
 </html>
