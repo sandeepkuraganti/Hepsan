@@ -3,166 +3,207 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Be My Valentine? ❤️</title>
+    <title>Our Love Story ❤️</title>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary-pink: #ff4d6d;
-            --secondary-pink: #ff85a1;
-            --bg-color: #fff0f3;
+            --deep-red: #c9184a;
+            --hot-pink: #ff4d6d;
+            --glass-white: rgba(255, 255, 255, 0.25);
+            --text-color: #2b2d42;
         }
 
         body {
             margin: 0;
-            padding: 0;
+            min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
-            background-color: var(--bg-color);
-            font-family: 'Arial', sans-serif;
-            overflow: hidden;
-            text-align: center;
+            background: linear-gradient(45deg, #ffafbd, #ffc3a0, #ffafbd);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            font-family: 'Montserrat', sans-serif;
+            overflow-x: hidden;
         }
 
-        #main-card {
-            background: white;
-            padding: 2rem;
-            border-radius: 20px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-            max-width: 400px;
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .container {
+            background: var(--glass-white);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 30px;
+            padding: 3rem 2rem;
             width: 90%;
-            transition: all 0.5s ease;
+            max-width: 500px;
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.2);
+            text-align: center;
+            z-index: 10;
         }
 
-        .gif-container img {
-            width: 200px;
-            border-radius: 10px;
-            margin-bottom: 1rem;
+        .couple-photo {
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            border: 5px solid white;
+            object-fit: cover;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
         }
 
         h1 {
-            color: var(--primary-pink);
-            font-size: 1.8rem;
-            margin-bottom: 0.5rem;
+            font-family: 'Dancing Script', cursive;
+            color: var(--deep-red);
+            font-size: 3.5rem;
+            margin: 0;
         }
 
-        .telugu-text {
-            color: var(--secondary-pink);
-            font-size: 1.2rem;
-            margin-bottom: 1.5rem;
+        .sub-text {
+            font-size: 1.1rem;
+            color: var(--text-color);
+            margin-bottom: 2rem;
+            font-weight: 300;
+        }
+
+        .telugu-romantic {
+            font-size: 1.3rem;
+            color: var(--deep-red);
             display: block;
+            margin-bottom: 2rem;
         }
 
         .btn-group {
             display: flex;
             justify-content: center;
+            gap: 25px;
             align-items: center;
-            gap: 20px;
-            min-height: 60px;
-            position: relative; /* This keeps buttons contained initially */
+            height: 60px;
         }
 
-        button {
-            padding: 10px 25px;
-            font-size: 1.1rem;
+        .btn {
+            padding: 12px 35px;
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: 50px;
             border: none;
-            border-radius: 10px;
             cursor: pointer;
-            transition: transform 0.2s;
-            z-index: 1;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
         #yesBtn {
-            background-color: var(--primary-pink);
+            background: var(--hot-pink);
             color: white;
+            box-shadow: 0 4px 15px rgba(255, 77, 109, 0.4);
+        }
+
+        #yesBtn:hover {
+            transform: scale(1.1);
+            background: var(--deep-red);
         }
 
         #noBtn {
-            background-color: #ccc;
-            color: #333;
-            /* Removed absolute positioning so it starts next to Yes */
+            background: #f8f9fa;
+            color: #6c757d;
         }
 
-        .celebration-hidden {
-            display: none;
+        /* Success View */
+        .celebration-hidden { display: none; }
+        
+        .gallery {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 2rem;
         }
 
-        .heart-particle {
-            position: absolute;
-            color: var(--primary-pink);
+        .gallery img {
+            width: 100%;
+            height: 120px;
+            object-fit: cover;
+            border-radius: 15px;
+        }
+
+        .heart {
+            position: fixed;
             pointer-events: none;
-            animation: fly 3s linear forwards;
+            z-index: 5;
+            animation: floatUp 4s linear forwards;
         }
 
-        @keyframes fly {
-            to {
-                transform: translateY(-100vh) translateX(calc(-50px + 100px * var(--rand)));
-                opacity: 0;
-            }
+        @keyframes floatUp {
+            0% { transform: translateY(100vh) scale(0); opacity: 1; }
+            100% { transform: translateY(-10vh) scale(1.5); opacity: 0; }
         }
     </style>
 </head>
 <body>
 
-    <div id="main-card">
-        <div id="question-ui">
-            <div class="gif-container">
-                <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHpueGZ3bmZqZzR4eGZ3bmZqZzR4eGZ3bmZqZzR4eGZ3bmZqZzR4ZSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/c76IJLufpNwSULPk77/giphy.gif" alt="Cute Panda">
-            </div>
-            <h1>Will you be my Valentine?</h1>
-            <span class="telugu-text">నువ్వు నా వాలెంటైన్ అవుతావా?</span>
+    <div class="container" id="mainCard">
+        <div id="questionView">
+            <img src="https://images.unsplash.com/photo-1518199266791-5375a83190b7?auto=format&fit=crop&q=80&w=400" alt="Us" class="couple-photo">
+            
+            <h1>Be Mine?</h1>
+            <p class="sub-text">Every moment with you is a gift.</p>
+            <span class="telugu-romantic">నీతో గడిపే ప్రతి క్షణం ఒక జ్ఞాపకం.</span>
             
             <div class="btn-group">
-                <button id="yesBtn">Yes!</button>
-                <button id="noBtn">No</button>
+                <button class="btn" id="yesBtn">Yes!</button>
+                <button class="btn" id="noBtn">No</button>
             </div>
         </div>
 
-        <div id="answer-ui" class="celebration-hidden">
-            <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHpueGZ3bmZqZzR4eGZ3bmZqZzR4eGZ3bmZqZzR4eGZ3bmZqZzR4ZSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/26BRv0ThflsHCqfJA/giphy.gif" width="200">
-            <h1>Yay! I knew it! ❤️</h1>
-            <p>మన ఇద్దరి జంట సూపర్!</p>
+        <div id="successView" class="celebration-hidden">
+            <h1>I Knew It! ❤️</h1>
+            <p class="sub-text">You just made me the happiest person!</p>
+            
+            <div class="gallery">
+                <img src="https://images.unsplash.com/photo-1511739001486-6bfe10ce785f?auto=format&fit=crop&q=80&w=200" alt="Memory 1">
+                <img src="https://images.unsplash.com/photo-1494774157365-9e04c6720e47?auto=format&fit=crop&q=80&w=200" alt="Memory 2">
+            </div>
+            <p style="margin-top: 2rem; font-weight: 600;">నువ్వు నా ప్రపంచం!</p>
         </div>
     </div>
 
     <script>
         const noBtn = document.getElementById('noBtn');
         const yesBtn = document.getElementById('yesBtn');
-        const questionUI = document.getElementById('question-ui');
-        const answerUI = document.getElementById('answer-ui');
+        const questionView = document.getElementById('questionView');
+        const successView = document.getElementById('successView');
 
-        // Move "No" button on hover/touch
-        const moveButton = () => {
+        const moveNoButton = () => {
             const x = Math.random() * (window.innerWidth - noBtn.offsetWidth);
             const y = Math.random() * (window.innerHeight - noBtn.offsetHeight);
-            
-            noBtn.style.position = 'fixed'; // Switch to fixed ONLY when moving
+            noBtn.style.position = 'fixed';
             noBtn.style.left = `${x}px`;
             noBtn.style.top = `${y}px`;
         };
 
-        noBtn.addEventListener('mouseover', moveButton);
-        noBtn.addEventListener('touchstart', moveButton);
+        noBtn.addEventListener('mouseover', moveNoButton);
+        noBtn.addEventListener('touchstart', moveNoButton);
 
-        // Handle "Yes" click
         yesBtn.addEventListener('click', () => {
-            questionUI.classList.add('celebration-hidden');
-            answerUI.classList.remove('celebration-hidden');
-            startHearts();
+            questionView.classList.add('celebration-hidden');
+            successView.classList.remove('celebration-hidden');
+            createHearts();
         });
 
-        function startHearts() {
+        function createHearts() {
             setInterval(() => {
                 const heart = document.createElement('div');
-                heart.classList.add('heart-particle');
+                heart.className = 'heart';
                 heart.innerHTML = '❤️';
                 heart.style.left = Math.random() * 100 + 'vw';
-                heart.style.top = '100vh';
-                heart.style.setProperty('--rand', Math.random());
+                heart.style.fontSize = (Math.random() * 20 + 20) + 'px';
                 document.body.appendChild(heart);
-                
-                setTimeout(() => heart.remove(), 3000);
-            }, 100);
+                setTimeout(() => heart.remove(), 4000);
+            }, 150);
         }
     </script>
 </body>
