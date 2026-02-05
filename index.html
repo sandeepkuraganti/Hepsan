@@ -8,7 +8,233 @@
     <style>
         :root {
             --primary-red: #d90429;
-            --overlay-dark: rgba(0, 0, 0, 0.4);
+            --overlay-dark: rgba(0, 0, 0, 0.4);<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>For My Valentine ❤️</title>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-red: #d90429;
+            --overlay-dark: rgba(0, 0, 0, 0.5);
+            --glass: rgba(255, 255, 255, 0.15);
+        }
+
+        html, body {
+            margin: 0; padding: 0;
+            width: 100%; height: 100%;
+            overflow: hidden;
+            background-color: #000;
+            font-family: 'Montserrat', sans-serif;
+            touch-action: manipulation;
+        }
+
+        #bg-image {
+            position: fixed; top: 0; left: 0;
+            width: 100vw; height: 100vh;
+            background-image: url('us-main.jpg');
+            background-size: cover;
+            background-position: center center;
+            z-index: 1;
+            transition: background-image 0.8s ease-in-out;
+        }
+
+        .overlay {
+            position: fixed; top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: var(--overlay-dark);
+            z-index: 2;
+        }
+
+        /* Login Screen Styling */
+        #loginScreen {
+            position: fixed; top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0,0,0,0.85);
+            display: flex; flex-direction: column;
+            justify-content: center; align-items: center;
+            z-index: 1000;
+            transition: opacity 0.8s ease;
+        }
+
+        .login-card {
+            background: var(--glass);
+            backdrop-filter: blur(15px);
+            padding: 2.5rem; border-radius: 30px;
+            border: 1px solid rgba(255,255,255,0.2);
+            text-align: center; color: white;
+            width: 80%; max-width: 350px;
+        }
+
+        .login-card h2 { font-family: 'Dancing Script', cursive; font-size: 2.2rem; margin-bottom: 1rem; }
+
+        input#pinInput {
+            width: 100%; padding: 15px;
+            font-size: 1.5rem; border-radius: 15px;
+            border: none; text-align: center;
+            letter-spacing: 10px; margin-bottom: 1.5rem;
+            background: rgba(255,255,255,0.9);
+        }
+
+        /* Main UI Layer (Hidden initially) */
+        .ui-layer {
+            position: relative; z-index: 10;
+            height: 100vh; display: none; /* Changed via JS */
+            flex-direction: column; justify-content: center;
+            align-items: center; text-align: center;
+            padding: 20px; color: white;
+        }
+
+        h1 { font-family: 'Dancing Script', cursive; font-size: clamp(2.5rem, 8vw, 4.5rem); margin: 0 0 20px 0; text-shadow: 2px 4px 10px rgba(0,0,0,0.5); }
+        .telugu-msg { font-size: clamp(1.2rem, 4vw, 1.8rem); margin-bottom: 40px; font-weight: 300; }
+        .btn-group { display: flex; gap: 25px; align-items: center; justify-content: center; width: 100%; }
+
+        .btn {
+            padding: 18px 45px; font-size: 1.2rem; font-weight: 700;
+            border-radius: 60px; border: none; cursor: pointer;
+            transition: all 0.2s; text-transform: uppercase;
+        }
+
+        #yesBtn { background: var(--primary-red); color: white; }
+        #noBtn { background: white; color: #333; position: relative; }
+
+        #smartPopup {
+            display: none; position: fixed;
+            top: 50%; left: 50%; transform: translate(-50%, -50%);
+            background: rgba(217, 4, 41, 0.95); color: white;
+            padding: 2rem; border-radius: 30px; z-index: 2000;
+            width: 80%; max-width: 400px; text-align: center;
+        }
+
+        .heart-particle { position: fixed; pointer-events: none; animation: floatUp 4s linear forwards; z-index: 5; }
+        @keyframes floatUp { 0% { transform: translateY(100vh) scale(0); opacity: 1; } 100% { transform: translateY(-10vh) scale(2); opacity: 0; } }
+    </style>
+</head>
+<body>
+
+    <div id="bg-image"></div>
+    <div class="overlay"></div>
+
+    <div id="loginScreen">
+        <div class="login-card">
+            <h2>Our Secret Date ❤️</h2>
+            <p>Enter our special 4-digit code to unlock</p>
+            <input type="password" id="pinInput" placeholder="0000" maxlength="4" pattern="\d*">
+            <button class="btn" id="unlockBtn" style="background: var(--primary-red); color: white; width: 100%;">Unlock</button>
+            <p id="errorMsg" style="color: #ff4d6d; margin-top: 1rem; display: none;">Oops! Try again ❤️</p>
+        </div>
+    </div>
+
+    <div id="smartPopup">Dont act smart! <br> You only have option that is YES! 😉</div>
+
+    <div class="ui-layer" id="mainUI">
+        <h1 id="question">Will you be my Valentine?</h1>
+        <div class="telugu-msg" id="subText">నువ్వు నా వాలెంటైన్ అవుతావా?</div>
+        
+        <div class="btn-group" id="btnGroup">
+            <button class="btn" id="yesBtn">Yes!</button>
+            <button class="btn" id="noBtn">No</button>
+        </div>
+    </div>
+
+    <script>
+        // --- 1. PIN LOGIC ---
+        const SECRET_PIN = "0512"; // <--- CHANGE YOUR PIN HERE (e.g., Anniversary or Birthday)
+        const loginScreen = document.getElementById('loginScreen');
+        const pinInput = document.getElementById('pinInput');
+        const unlockBtn = document.getElementById('unlockBtn');
+        const errorMsg = document.getElementById('errorMsg');
+        const mainUI = document.getElementById('mainUI');
+
+        unlockBtn.addEventListener('click', () => {
+            if (pinInput.value === SECRET_PIN) {
+                loginScreen.style.opacity = '0';
+                setTimeout(() => {
+                    loginScreen.style.display = 'none';
+                    mainUI.style.display = 'flex';
+                }, 800);
+            } else {
+                errorMsg.style.display = 'block';
+                pinInput.value = '';
+            }
+        });
+
+        // --- 2. JOURNEY LOGIC ---
+        let currentStep = 0;
+        let noAvoidCount = 0;
+        const noBtn = document.getElementById('noBtn');
+        const yesBtn = document.getElementById('yesBtn');
+        const bgImage = document.getElementById('bg-image');
+        const questionText = document.getElementById('question');
+        const subText = document.getElementById('subText');
+        const popup = document.getElementById('smartPopup');
+
+        const contentSteps = [
+            { photo: 'us-recent.jpg', question: 'Dont you want to be my Valentine? 😢', telugu: 'నీకు ఇష్టం లేదా?' },
+            { photo: 'us-first.jpg', question: 'Still dont want to be my Valentine?', telugu: 'మళ్ళీ ఆలోచించు...' },
+            { photo: 'me.jpg', question: 'Last warning, click Yes! 😤', telugu: 'ఇది ఆఖరి హెచ్చరిక!' }
+        ];
+
+        noBtn.addEventListener('click', () => {
+            if (currentStep < 3) {
+                const step = contentSteps[currentStep];
+                bgImage.style.backgroundImage = `url('${step.photo}')`;
+                questionText.innerText = step.question;
+                subText.innerText = step.telugu;
+                currentStep++;
+                if (currentStep === 3) { noBtn.style.backgroundColor = "#d90429"; noBtn.style.color = "white"; }
+            }
+        });
+
+        const moveButton = (e) => {
+            if (currentStep === 3) {
+                if (e.type === 'touchstart') {
+                    noAvoidCount++;
+                    if (noAvoidCount >= 2) {
+                        popup.style.display = 'block';
+                        setTimeout(() => { popup.style.display = 'none'; }, 2500);
+                    }
+                }
+                const x = Math.random() * (window.innerWidth - noBtn.offsetWidth - 40) + 20;
+                const y = Math.random() * (window.innerHeight - noBtn.offsetHeight - 40) + 20;
+                noBtn.style.position = 'fixed';
+                noBtn.style.left = `${x}px`;
+                noBtn.style.top = `${y}px`;
+            }
+        };
+
+        noBtn.addEventListener('mouseover', moveButton);
+        noBtn.addEventListener('touchstart', moveButton);
+
+        yesBtn.addEventListener('click', () => {
+            mainUI.innerHTML = `
+                <h1 style="font-size: clamp(3rem, 10vw, 5.5rem);">I Knew It! ❤️</h1>
+                <div class="telugu-msg" style="font-size: 2rem;">
+                    నాకు తెలుసు నువ్వు నాకు నో చెప్పలేవని... <br> 
+                    <strong>I Love You!</strong>
+                </div>
+            `;
+            bgImage.style.backgroundImage = "url('us-final.jpg')";
+            bgImage.style.filter = "brightness(0.6)";
+            startHearts();
+        });
+
+        function startHearts() {
+            setInterval(() => {
+                const heart = document.createElement('div');
+                heart.className = 'heart-particle';
+                heart.innerHTML = '❤️';
+                heart.style.left = Math.random() * 100 + 'vw';
+                heart.style.fontSize = (Math.random() * 30 + 20) + 'px';
+                document.body.appendChild(heart);
+                setTimeout(() => heart.remove(), 4000);
+            }, 100);
+        }
+    </script>
+</body>
+</html>
         }
 
         /* Forces content to fill the screen aspect ratio */
