@@ -4,115 +4,138 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>For My Valentine ❤️</title>
-    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
     <style>
         :root {
             --primary-red: #d90429;
-            --soft-white: rgba(255, 255, 255, 0.85);
+            --overlay-dark: rgba(0, 0, 0, 0.4);
         }
 
-        /* Forces content to the edges of the screen */
+        /* Forces content to fill the screen aspect ratio */
         html, body {
             margin: 0; padding: 0;
-            width: 100vw; height: 100vh;
+            width: 100%; height: 100%;
             overflow: hidden;
             background-color: #000;
+            font-family: 'Montserrat', sans-serif;
             touch-action: manipulation;
         }
 
-        /* Full Screen Aspect Ratio Background */
+        /* Full Screen Dynamic Background */
         #bg-image {
             position: fixed; top: 0; left: 0;
-            width: 100%; height: 100%;
+            width: 100vw; height: 100vh;
             background-image: url('us-main.jpg');
             background-size: cover; /* Fills screen aspect ratio */
             background-position: center center;
-            filter: blur(8px) brightness(0.7);
-            z-index: -2;
+            z-index: 1;
             transition: background-image 0.8s ease-in-out;
         }
 
-        .white-overlay {
+        /* Dark overlay to make text pop against any photo */
+        .overlay {
             position: fixed; top: 0; left: 0;
             width: 100%; height: 100%;
-            background: rgba(255, 255, 255, 0.3);
-            z-index: -1;
+            background: var(--overlay-dark);
+            z-index: 2;
         }
 
-        .main-container {
-            display: flex; justify-content: center; align-items: center;
-            width: 100%; height: 100%;
-        }
-
-        .content-card {
-            background: var(--soft-white);
-            backdrop-filter: blur(15px);
-            padding: 2rem; border-radius: 30px;
-            box-shadow: 0 15px 45px rgba(0,0,0,0.4);
-            max-width: 400px; width: 85%;
-            border: 1px solid rgba(255,255,255,0.5);
-            position: relative; text-align: center;
-        }
-
-        /* Internal image also follows aspect ratio cover */
-        .display-photo {
-            width: 100%; height: 240px; 
-            object-fit: cover; /* Ensures inner photo looks professional */
-            border-radius: 20px; margin-bottom: 1.2rem;
+        .ui-layer {
+            position: relative;
+            z-index: 10;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 20px;
+            color: white;
         }
 
         h1 {
             font-family: 'Dancing Script', cursive;
-            color: var(--primary-red);
-            font-size: 2rem; margin: 10px 0; min-height: 70px;
+            font-size: clamp(2.5rem, 8vw, 4.5rem);
+            margin: 0 0 20px 0;
+            text-shadow: 2px 4px 10px rgba(0,0,0,0.5);
+        }
+
+        .telugu-msg {
+            font-size: clamp(1.2rem, 4vw, 1.8rem);
+            margin-bottom: 40px;
+            font-weight: 300;
+            text-shadow: 1px 2px 5px rgba(0,0,0,0.5);
         }
 
         .btn-group {
-            margin-top: 1rem; display: flex;
-            justify-content: center; gap: 15px; min-height: 60px;
+            display: flex;
+            gap: 25px;
+            min-height: 80px;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
         }
 
         .btn {
-            padding: 15px 30px; font-size: 1.1rem; font-weight: 600;
-            border-radius: 50px; border: none; cursor: pointer;
-            -webkit-tap-highlight-color: transparent;
+            padding: 18px 45px;
+            font-size: 1.2rem;
+            font-weight: 700;
+            border-radius: 60px;
+            border: none;
+            cursor: pointer;
+            transition: transform 0.2s, background-color 0.3s;
+            text-transform: uppercase;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
         }
 
-        #yesBtn { background: var(--primary-red); color: white; z-index: 100; }
-        #noBtn { background: #e9ecef; color: #495057; position: relative; z-index: 50; }
+        #yesBtn { background: var(--primary-red); color: white; }
+        #noBtn { background: white; color: #333; position: relative; }
 
+        /* The "Don't Act Smart" Popup */
         #smartPopup {
-            display: none; position: absolute;
-            top: 50%; left: 50%; transform: translate(-50%, -50%);
-            background: rgba(217, 4, 41, 0.95); color: white;
-            padding: 1.2rem; border-radius: 20px; z-index: 200;
-            width: 80%; font-weight: 600;
+            display: none;
+            position: fixed;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(217, 4, 41, 0.95);
+            color: white;
+            padding: 2rem;
+            border-radius: 30px;
+            z-index: 1000;
+            width: 80%;
+            max-width: 400px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            font-weight: 700;
+            text-align: center;
         }
 
-        .telugu-msg { font-size: 1.3rem; margin-top: 1rem; line-height: 1.5; color: #333; }
-        .heart-particle { position: fixed; pointer-events: none; animation: floatUp 4s linear forwards; }
+        .heart-particle {
+            position: fixed;
+            pointer-events: none;
+            animation: floatUp 4s linear forwards;
+            z-index: 5;
+        }
 
         @keyframes floatUp {
             0% { transform: translateY(100vh) scale(0); opacity: 1; }
-            100% { transform: translateY(-10vh) scale(1.5); opacity: 0; }
+            100% { transform: translateY(-10vh) scale(2); opacity: 0; }
         }
     </style>
 </head>
 <body>
 
     <div id="bg-image"></div>
-    <div class="white-overlay"></div>
+    <div class="overlay"></div>
 
-    <div class="main-container">
-        <div class="content-card" id="card">
-            <div id="smartPopup">Dont act smart! <br> You only have option that is YES! 😉</div>
-            <img src="us-main.jpg" id="mainPhoto" class="display-photo">
-            <h1 id="question">Will you be my Valentine?</h1>
-            
-            <div class="btn-group">
-                <button class="btn" id="yesBtn">Yes!</button>
-                <button class="btn" id="noBtn">No</button>
-            </div>
+    <div id="smartPopup">Dont act smart! <br> You only have option that is YES! 😉</div>
+
+    <div class="ui-layer" id="mainUI">
+        <h1 id="question">Will you be my Valentine?</h1>
+        <div class="telugu-msg" id="subText">నువ్వు నా వాలెంటైన్ అవుతావా?</div>
+        
+        <div class="btn-group" id="btnGroup">
+            <button class="btn" id="yesBtn">Yes!</button>
+            <button class="btn" id="noBtn">No</button>
         </div>
     </div>
 
@@ -121,25 +144,23 @@
         let noAvoidCount = 0;
         const noBtn = document.getElementById('noBtn');
         const yesBtn = document.getElementById('yesBtn');
-        const card = document.getElementById('card');
-        const popup = document.getElementById('smartPopup');
-        const questionText = document.getElementById('question');
-        const mainPhoto = document.getElementById('mainPhoto');
         const bgImage = document.getElementById('bg-image');
+        const questionText = document.getElementById('question');
+        const subText = document.getElementById('subText');
+        const popup = document.getElementById('smartPopup');
 
         const contentSteps = [
-            { photo: 'us-recent.jpg', question: 'Dont you want to be my Valentine? 😢' },
-            { photo: 'us-first.jpg', question: 'Still dont want to be my Valentine?' },
-            { photo: 'me.jpg', question: 'Last warning, click Yes! 😤' }
+            { photo: 'us-recent.jpg', question: 'Dont you want to be my Valentine? 😢', telugu: 'నీకు ఇష్టం లేదా?' },
+            { photo: 'us-first.jpg', question: 'Still dont want to be my Valentine?', telugu: 'మళ్ళీ ఆలోచించు...' },
+            { photo: 'me.jpg', question: 'Last warning, click Yes! 😤', telugu: 'ఇది ఆఖరి హెచ్చరిక!' }
         ];
 
-        // "No" click handling
         noBtn.addEventListener('click', () => {
             if (currentStep < 3) {
                 const step = contentSteps[currentStep];
-                mainPhoto.src = step.photo;
-                questionText.innerText = step.question;
                 bgImage.style.backgroundImage = `url('${step.photo}')`;
+                questionText.innerText = step.question;
+                subText.innerText = step.telugu;
                 currentStep++;
 
                 if (currentStep === 3) {
@@ -149,7 +170,6 @@
             }
         });
 
-        // Runaway logic constrained to the center card
         const moveButton = (e) => {
             if (currentStep === 3) {
                 if (e.type === 'touchstart') {
@@ -160,29 +180,29 @@
                     }
                 }
 
-                const cardRect = card.getBoundingClientRect();
-                const x = Math.random() * (cardRect.width - noBtn.offsetWidth);
-                const y = Math.random() * (cardRect.height - noBtn.offsetHeight);
+                // Moves across the entire screen since we removed the card box
+                const x = Math.random() * (window.innerWidth - noBtn.offsetWidth - 40) + 20;
+                const y = Math.random() * (window.innerHeight - noBtn.offsetHeight - 40) + 20;
                 
-                noBtn.style.position = 'absolute';
+                noBtn.style.position = 'fixed';
                 noBtn.style.left = `${x}px`;
                 noBtn.style.top = `${y}px`;
-                noBtn.style.margin = '0';
             }
         };
 
         noBtn.addEventListener('mouseover', moveButton);
         noBtn.addEventListener('touchstart', moveButton);
 
-        // "Yes" button final animation
         yesBtn.addEventListener('click', () => {
-            card.innerHTML = `
-                <img src="us-final.jpg" class="display-photo" style="object-fit: cover;">
-                <h1>I Knew It! ❤️</h1>
-                <p class="telugu-msg">నాకు తెలుసు నువ్వు నాకు నో చెప్పలేవని... <br> <strong>I Love You!</strong></p>
+            document.getElementById('mainUI').innerHTML = `
+                <h1 style="font-size: 5rem;">I Knew It! ❤️</h1>
+                <div class="telugu-msg" style="font-size: 2rem;">
+                    నాకు తెలుసు నువ్వు నాకు నో చెప్పలేవని... <br> 
+                    <strong>I Love You!</strong>
+                </div>
             `;
             bgImage.style.backgroundImage = "url('us-final.jpg')";
-            bgImage.style.filter = "blur(12px) brightness(0.6)";
+            bgImage.style.filter = "brightness(0.6)";
             startHearts();
         });
 
@@ -192,10 +212,10 @@
                 heart.className = 'heart-particle';
                 heart.innerHTML = '❤️';
                 heart.style.left = Math.random() * 100 + 'vw';
-                heart.style.fontSize = (Math.random() * 20 + 20) + 'px';
+                heart.style.fontSize = (Math.random() * 30 + 20) + 'px';
                 document.body.appendChild(heart);
                 setTimeout(() => heart.remove(), 4000);
-            }, 150);
+            }, 100);
         }
     </script>
 </body>
