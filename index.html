@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>For My Valentine ❤️</title>
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
@@ -11,21 +11,20 @@
             --soft-white: rgba(255, 255, 255, 0.9);
         }
 
-        /* Forces the background to occupy the full browser window */
         html, body {
             margin: 0; padding: 0;
             width: 100%; height: 100%;
             overflow: hidden;
-            background-color: #000; /* Black fallback for better contrast */
+            background-color: #000;
+            touch-action: manipulation; /* Prevents double-tap zoom delay */
         }
 
         #bg-image {
             position: fixed; top: 0; left: 0;
             width: 100vw; height: 100vh;
             background-image: url('us-main.jpg');
-            background-size: cover; /* This makes the image fill the screen */
-            background-position: center;
-            filter: blur(8px) brightness(0.8); /* Soft blur + slightly dark for readability */
+            background-size: cover; background-position: center;
+            filter: blur(8px) brightness(0.8);
             z-index: -2;
             transition: background-image 0.8s ease-in-out;
         }
@@ -33,7 +32,7 @@
         .white-overlay {
             position: fixed; top: 0; left: 0;
             width: 100vw; height: 100vh;
-            background: rgba(255, 255, 255, 0.3); /* Transparent white layer */
+            background: rgba(255, 255, 255, 0.3);
             z-index: -1;
         }
 
@@ -45,50 +44,48 @@
         .content-card {
             background: var(--soft-white);
             backdrop-filter: blur(15px);
-            padding: 2.5rem; border-radius: 30px;
+            padding: 2rem; border-radius: 30px;
             box-shadow: 0 15px 45px rgba(0,0,0,0.3);
-            max-width: 420px; width: 90%;
+            max-width: 400px; width: 85%;
             border: 1px solid rgba(255,255,255,0.5);
             position: relative; text-align: center;
         }
 
         .display-photo {
-            width: 100%; height: 260px; object-fit: cover;
-            border-radius: 20px; margin-bottom: 1.5rem;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+            width: 100%; height: 240px; object-fit: cover;
+            border-radius: 20px; margin-bottom: 1.2rem;
         }
 
         h1 {
             font-family: 'Dancing Script', cursive;
             color: var(--primary-red);
-            font-size: 2.2rem; margin: 10px 0; min-height: 80px;
+            font-size: 2rem; margin: 10px 0; min-height: 70px;
         }
 
         .btn-group {
-            margin-top: 1.5rem; display: flex;
-            justify-content: center; gap: 20px; min-height: 60px;
+            margin-top: 1rem; display: flex;
+            justify-content: center; gap: 15px; min-height: 60px;
         }
 
         .btn {
-            padding: 12px 35px; font-size: 1.1rem; font-weight: 600;
+            padding: 15px 30px; /* Bigger buttons for mobile thumbs */
+            font-size: 1.1rem; font-weight: 600;
             border-radius: 50px; border: none; cursor: pointer;
-            transition: all 0.2s;
+            -webkit-tap-highlight-color: transparent;
         }
 
-        #yesBtn { background: var(--primary-red); color: white; z-index: 10; }
-        #noBtn { background: #e9ecef; color: #495057; position: relative; z-index: 5; }
+        #yesBtn { background: var(--primary-red); color: white; position: relative; z-index: 100; }
+        #noBtn { background: #e9ecef; color: #495057; position: relative; z-index: 50; }
 
-        /* "Don't Act Smart" Popup */
         #smartPopup {
             display: none; position: absolute;
             top: 50%; left: 50%; transform: translate(-50%, -50%);
             background: rgba(217, 4, 41, 0.95); color: white;
-            padding: 1.5rem; border-radius: 20px; z-index: 100;
-            width: 80%; box-shadow: 0 10px 30px rgba(0,0,0,0.4);
-            font-weight: 600;
+            padding: 1.2rem; border-radius: 20px; z-index: 200;
+            width: 80%; font-weight: 600;
         }
 
-        .telugu-msg { font-size: 1.3rem; margin-top: 1rem; line-height: 1.6; color: #333; }
+        .telugu-msg { font-size: 1.2rem; margin-top: 1rem; line-height: 1.5; color: #333; }
         .heart-particle { position: fixed; pointer-events: none; animation: floatUp 4s linear forwards; }
 
         @keyframes floatUp {
@@ -132,16 +129,15 @@
             { photo: 'me.jpg', question: 'Last warning, click Yes! 😤' }
         ];
 
-        noBtn.addEventListener('click', () => {
-            if (currentStep < contentSteps.length) {
+        // "No" click handling (Works for both mobile and desktop)
+        noBtn.addEventListener('click', (e) => {
+            if (currentStep < 3) {
                 const step = contentSteps[currentStep];
                 mainPhoto.src = step.photo;
                 questionText.innerText = step.question;
-                
-                // This line updates the full-screen background image
                 bgImage.style.backgroundImage = `url('${step.photo}')`;
-                
                 currentStep++;
+
                 if (currentStep === 3) {
                     noBtn.style.backgroundColor = "#d90429";
                     noBtn.style.color = "white";
@@ -149,16 +145,22 @@
             }
         });
 
-        const moveButton = () => {
+        // Runaway logic (Optimized for Mobile)
+        const moveButton = (e) => {
             if (currentStep === 3) {
-                noAvoidCount++;
-                if (noAvoidCount >= 2) {
-                    popup.style.display = 'block';
-                    setTimeout(() => { popup.style.display = 'none'; }, 3000);
+                // If it's a touch event, we stop the click from happening
+                if (e.type === 'touchstart') {
+                    noAvoidCount++;
+                    if (noAvoidCount >= 2) {
+                        popup.style.display = 'block';
+                        setTimeout(() => { popup.style.display = 'none'; }, 2500);
+                    }
                 }
+
                 const cardRect = card.getBoundingClientRect();
                 const x = Math.random() * (cardRect.width - noBtn.offsetWidth);
                 const y = Math.random() * (cardRect.height - noBtn.offsetHeight);
+                
                 noBtn.style.position = 'absolute';
                 noBtn.style.left = `${x}px`;
                 noBtn.style.top = `${y}px`;
@@ -166,9 +168,11 @@
             }
         };
 
+        // Separate listeners for Desktop and Mobile
         noBtn.addEventListener('mouseover', moveButton);
-        noBtn.addEventListener('touchstart', (e) => { e.preventDefault(); moveButton(); });
+        noBtn.addEventListener('touchstart', moveButton);
 
+        // "Yes" button handling
         yesBtn.addEventListener('click', () => {
             card.innerHTML = `
                 <img src="us-final.jpg" class="display-photo">
