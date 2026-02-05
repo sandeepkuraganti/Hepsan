@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Be My Valentine? ❤️</title>
+    <style>
+        :root {
+            --primary-pink: #ff4d6d;
+            --secondary-pink: #ff85a1;
+            --bg-color: #fff0f3;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: var(--bg-color);
+            font-family: 'Arial', sans-serif;
+            overflow: hidden;
+            text-align: center;
+        }
+
+        #main-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            max-width: 400px;
+            width: 90%;
+            transition: all 0.5s ease;
+        }
+
+        .gif-container img {
+            width: 200px;
+            border-radius: 10px;
+            margin-bottom: 1rem;
+        }
+
+        h1 {
+            color: var(--primary-pink);
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .telugu-text {
+            color: var(--secondary-pink);
+            font-size: 1.2rem;
+            margin-bottom: 1.5rem;
+            display: block;
+        }
+
+        .btn-group {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            position: relative;
+            height: 50px;
+        }
+
+        button {
+            padding: 10px 25px;
+            font-size: 1.1rem;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        #yesBtn {
+            background-color: var(--primary-pink);
+            color: white;
+        }
+
+        #noBtn {
+            background-color: #ccc;
+            color: #333;
+            position: absolute;
+        }
+
+        .celebration-hidden {
+            display: none;
+        }
+
+        .heart-particle {
+            position: absolute;
+            color: var(--primary-pink);
+            pointer-events: none;
+            animation: fly 3s linear forwards;
+        }
+
+        @keyframes fly {
+            to {
+                transform: translateY(-100vh) translateX(calc(-50px + 100px * var(--rand)));
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="main-card">
+        <div id="question-ui">
+            <div class="gif-container">
+                <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHpueGZ3bmZqZzR4eGZ3bmZqZzR4eGZ3bmZqZzR4eGZ3bmZqZzR4ZSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/c76IJLufpNwSULPk77/giphy.gif" alt="Cute Panda">
+            </div>
+            <h1>Will you be my Valentine?</h1>
+            <span class="telugu-text">నువ్వు నా వాలెంటైన్ అవుతావా?</span>
+            
+            <div class="btn-group">
+                <button id="yesBtn">Yes!</button>
+                <button id="noBtn">No</button>
+            </div>
+        </div>
+
+        <div id="answer-ui" class="celebration-hidden">
+            <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHpueGZ3bmZqZzR4eGZ3bmZqZzR4eGZ3bmZqZzR4eGZ3bmZqZzR4ZSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/26BRv0ThflsHCqfJA/giphy.gif" width="200">
+            <h1>Yay! I knew it! ❤️</h1>
+            <p>మన ఇద్దరి జంట సూపర్!</p>
+        </div>
+    </div>
+
+    <script>
+        const noBtn = document.getElementById('noBtn');
+        const yesBtn = document.getElementById('yesBtn');
+        const questionUI = document.getElementById('question-ui');
+        const answerUI = document.getElementById('answer-ui');
+
+        // Move "No" button on hover
+        noBtn.addEventListener('mouseover', () => {
+            const x = Math.random() * (window.innerWidth - noBtn.offsetWidth);
+            const y = Math.random() * (window.innerHeight - noBtn.offsetHeight);
+            
+            noBtn.style.left = `${x}px`;
+            noBtn.style.top = `${y}px`;
+            noBtn.style.position = 'fixed';
+        });
+
+        // Handle "Yes" click
+        yesBtn.addEventListener('click', () => {
+            questionUI.classList.add('celebration-hidden');
+            answerUI.classList.remove('celebration-hidden');
+            startHearts();
+        });
+
+        function startHearts() {
+            setInterval(() => {
+                const heart = document.createElement('div');
+                heart.classList.add('heart-particle');
+                heart.innerHTML = '❤️';
+                heart.style.left = Math.random() * 100 + 'vw';
+                heart.style.top = '100vh';
+                heart.style.setProperty('--rand', Math.random());
+                document.body.appendChild(heart);
+                
+                setTimeout(() => heart.remove(), 3000);
+            }, 100);
+        }
+    </script>
+</body>
+</html>
