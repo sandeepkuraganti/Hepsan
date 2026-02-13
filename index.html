@@ -41,7 +41,7 @@
         #loginScreen {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0,0,0,0.95); display: flex; flex-direction: column;
-            justify-content: center; align-items: center; z-index: 1000; transition: opacity 0.8s ease;
+            justify-content: center; align-items: center; z-index: 2000; transition: opacity 0.8s ease;
         }
         .login-card {
             background: var(--glass); backdrop-filter: blur(20px); padding: 2.5rem; border-radius: 30px;
@@ -56,11 +56,10 @@
         .btn-group { display: flex; gap: 30px; align-items: flex-start; justify-content: center; width: 100%; }
         .btn-wrapper { display: flex; flex-direction: column; align-items: center; gap: 8px; width: 140px; }
         .btn { width: 100%; padding: 15px 0; font-size: 1.1rem; font-weight: 700; border-radius: 60px; border: none; cursor: pointer; transition: all 0.3s; text-transform: uppercase; }
-        #yesBtn { background: var(--primary-red); color: white; box-shadow: 0 10px 20px rgba(217, 4, 41, 0.4); }
-        #noBtn { background: white; color: #333; position: relative; z-index: 50; }
+        #yesBtn { background: var(--primary-red); color: white; box-shadow: 0 10px 20px rgba(217, 4, 41, 0.4); z-index: 100; }
+        #noBtn { background: white; color: #333; position: relative; z-index: 150; }
         .btn-quote { font-size: 0.85rem; opacity: 0.9; font-style: italic; min-height: 1.2rem; }
 
-        /* Secret Modal Stylings */
         #secretModal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.94); z-index: 5000; justify-content: center; align-items: center; }
         .modal-card { background: white; color: #333; padding: 2.5rem; border-radius: 30px; width: 85%; max-width: 450px; text-align: center; position: relative; box-shadow: 0 15px 40px rgba(0,0,0,0.5); overflow-y: auto; max-height: 80vh; }
         .modal-card h3 { font-family: 'Dancing Script', cursive; font-size: 2.2rem; color: var(--primary-red); margin-bottom: 1rem; }
@@ -68,29 +67,15 @@
 
         #challengeHint { font-family: 'Dancing Script', cursive; font-size: 1.4rem; color: #ffb3c1; opacity: 0; transition: opacity 2s ease; margin-top: 10px; z-index: 3500; }
 
-        /* REFINED: THE GLOWING SECRET HEART */
         #secretHeart {
             position: fixed; bottom: 35px; left: 50%; 
             font-size: 2.2rem; cursor: pointer; z-index: 4500;
-            opacity: 0.2; /* Slightly more visible initial state */
-            transition: all 0.5s ease;
+            opacity: 0.2; transition: all 0.5s ease;
             transform: translateX(-50%) scale(1);
         }
-
-        #secretHeart:hover {
-            opacity: 1;
-            filter: drop-shadow(0 0 8px #fff) drop-shadow(0 0 20px var(--primary-red));
-            transform: translateX(-50%) scale(1.2);
-        }
-
-        /* The expansion effect on click */
-        .heart-expand {
-            animation: fullScreenExpand 1.2s forwards ease-in !important;
-        }
-
-        @keyframes fullScreenExpand {
-            to { transform: translateX(-50%) scale(80); opacity: 1; }
-        }
+        #secretHeart:hover { opacity: 1; filter: drop-shadow(0 0 8px #fff) drop-shadow(0 0 20px var(--primary-red)); transform: translateX(-50%) scale(1.2); }
+        .heart-expand { animation: fullScreenExpand 1.2s forwards ease-in !important; }
+        @keyframes fullScreenExpand { to { transform: translateX(-50%) scale(80); opacity: 1; } }
 
         .heart-particle { position: fixed; pointer-events: none; animation: floatUp 4s linear forwards; z-index: 5; }
         @keyframes floatUp { 0% { transform: translateY(100vh) scale(0); opacity: 1; } 100% { transform: translateY(-10vh) scale(2); opacity: 0; } }
@@ -155,16 +140,11 @@
 
         function startExpansion() {
             const heart = document.getElementById('secretHeart');
-            heart.classList.add('heart-expand'); // Triggers expansion
-            setTimeout(() => {
-                document.getElementById('secretModal').style.display = 'flex';
-                heart.classList.remove('heart-expand'); // Reset for later use
-            }, 1000);
+            heart.classList.add('heart-expand');
+            setTimeout(() => { document.getElementById('secretModal').style.display = 'flex'; heart.classList.remove('heart-expand'); }, 1000);
         }
-
         function closeSecret() { document.getElementById('secretModal').style.display = 'none'; }
 
-        // YouTube Logic
         let player;
         function onYouTubeIframeAPIReady() {
             player = new YT.Player('yt-player', {
@@ -214,6 +194,18 @@
             { photo: 'me.png', question: 'Last warning inka!', sub: 'Yes nokkuthava leda! 😤', yq: 'Smart choice!', nq: "Can't catch me!" }
         ];
 
+        // FIXED: The "No" button logic
+        const runaway = (e) => {
+            if (currentStep === 3) {
+                if(e) e.preventDefault(); 
+                const x = Math.random() * (window.innerWidth - 120);
+                const y = Math.random() * (window.innerHeight - 60);
+                noBtn.style.position = 'fixed'; 
+                noBtn.style.left = `${x}px`; 
+                noBtn.style.top = `${y}px`;
+            }
+        };
+
         noBtn.addEventListener('click', () => {
             if (currentStep < 3) {
                 const step = contentSteps[currentStep];
@@ -223,18 +215,11 @@
                 yesQuote.innerText = step.yq;
                 noQuote.innerText = step.nq;
                 currentStep++;
-            }
+            } else { runaway(); } // Chase mode after 3 steps
         });
 
-        const runaway = () => {
-            if (currentStep === 3) {
-                const x = Math.random() * (window.innerWidth - 120);
-                const y = Math.random() * (window.innerHeight - 60);
-                noBtn.style.position = 'fixed'; noBtn.style.left = `${x}px`; noBtn.style.top = `${y}px`;
-            }
-        };
         noBtn.addEventListener('mouseover', runaway);
-        noBtn.addEventListener('touchstart', (e) => { e.preventDefault(); runaway(); });
+        noBtn.addEventListener('touchstart', runaway);
 
         yesBtn.addEventListener('click', () => {
             mainUI.innerHTML = `
