@@ -8,7 +8,7 @@
     <style>
         :root {
             --primary-red: #d90429;
-            --overlay-dark: rgba(0, 0, 0, 0.5);
+            --overlay-dark: rgba(0, 0, 0, 0.55);
             --glass: rgba(255, 255, 255, 0.1);
         }
 
@@ -21,28 +21,24 @@
             touch-action: manipulation;
         }
 
+        /* Full-Screen Aspect Ratio Background */
         #bg-container { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 1; overflow: hidden; }
         #bg-image {
             width: 100%; height: 100%;
-            background-image: url('us-main.png'); background-size: cover; background-position: center;
+            background-image: url('us-main.png'); /* Updated to PNG */
+            background-size: cover;
+            background-position: center center;
             animation: kenBurns 25s infinite alternate ease-in-out;
             transition: background-image 1.2s ease-in-out;
         }
-        @keyframes kenBurns { 0% { transform: scale(1); } 100% { transform: scale(1.1); } }
+        @keyframes kenBurns { 0% { transform: scale(1); } 100% { transform: scale(1.15); } }
 
         .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--overlay-dark); z-index: 2; }
-
         #particles { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 3; }
-        .petal {
-            position: absolute;
-            background: linear-gradient(to bottom right, #ff5e7e, #ffc3a0);
-            border-radius: 150% 0 150% 0;
-            opacity: 0.5;
-            box-shadow: 0 0 5px rgba(0,0,0,0.2);
-            animation: fallRotate linear infinite;
-        }
-        @keyframes fallRotate { to { transform: translateY(120vh) rotate(720deg); } }
+        .snow { position: absolute; background: white; border-radius: 50%; opacity: 0.5; animation: fall linear infinite; }
+        @keyframes fall { to { transform: translateY(110vh); } }
 
+        /* Login Screen */
         #loginScreen {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0,0,0,0.95); display: flex; flex-direction: column;
@@ -59,6 +55,7 @@
             text-align: center; letter-spacing: 10px; margin-bottom: 1.5rem; background: rgba(255,255,255,0.9);
         }
 
+        /* UI Layer */
         .ui-layer {
             position: relative; z-index: 10; height: 100vh; display: none;
             flex-direction: column; justify-content: center; align-items: center; text-align: center;
@@ -69,7 +66,7 @@
 
         .btn-group { display: flex; gap: 25px; align-items: flex-start; justify-content: center; }
         .btn-wrapper { display: flex; flex-direction: column; align-items: center; gap: 8px; }
-        .btn { padding: 16px 40px; font-size: 1.1rem; font-weight: 700; border-radius: 60px; border: none; cursor: pointer; transition: all 0.3s; text-transform: uppercase; }
+        .btn { padding: 18px 45px; font-size: 1.1rem; font-weight: 700; border-radius: 60px; border: none; cursor: pointer; transition: all 0.3s; text-transform: uppercase; }
         #yesBtn { background: var(--primary-red); color: white; box-shadow: 0 10px 20px rgba(217, 4, 41, 0.4); }
         #noBtn { background: white; color: #333; position: relative; }
         .btn-quote { font-size: 0.85rem; opacity: 0.8; font-style: italic; min-height: 1.2rem; }
@@ -98,7 +95,7 @@
         </div>
     </div>
 
-    <div id="smartPopup">Dont act smart! <br> You only have option that is YES! 😉</div>
+    <div id="smartPopup">Dont act smart! <br> You only have one option, and that is YES! 😉</div>
 
     <div class="ui-layer" id="mainUI">
         <h1 id="question">Hey Hepsiba,<br>Will you be my Valentine?</h1>
@@ -123,21 +120,20 @@
         const errorMsg = document.getElementById('errorMsg');
         const mainUI = document.getElementById('mainUI');
 
-        function createPetals() {
+        function createSnow() {
             const particles = document.getElementById('particles');
-            for(let i=0; i<30; i++) {
-                const petal = document.createElement('div');
-                petal.className = 'petal';
-                const size = Math.random() * 15 + 10 + 'px';
-                petal.style.width = size; petal.style.height = size;
-                petal.style.left = Math.random() * 100 + 'vw';
-                const duration = Math.random() * 10 + 8 + 's';
-                petal.style.animationDuration = duration;
-                petal.style.animationDelay = Math.random() * 5 + 's';
-                particles.appendChild(petal);
+            for(let i=0; i<45; i++) {
+                const snow = document.createElement('div');
+                snow.className = 'snow';
+                const size = Math.random() * 5 + 2 + 'px';
+                snow.style.width = size; snow.style.height = size;
+                snow.style.left = Math.random() * 100 + 'vw';
+                snow.style.animationDuration = Math.random() * 6 + 6 + 's';
+                snow.style.animationDelay = Math.random() * 5 + 's';
+                particles.appendChild(snow);
             }
         }
-        createPetals();
+        createSnow();
 
         unlockBtn.addEventListener('click', () => {
             if (pinInput.value === SECRET_PIN) {
@@ -158,9 +154,9 @@
         const popup = document.getElementById('smartPopup');
 
         const contentSteps = [
-            { photo: 'us-recent.jpg', question: 'Are you serious, Hepsiba?', sub: 'Niku na valentine avvali ani leda? chesina show chalu kani ippatiki ayna musukoni yes nokku 😢', yq: 'Much better!', nq: 'Getting harder?' },
-            { photo: 'us-first.jpg', question: 'Still no?', sub: 'vukuntuna ani rechipothunava? chodu mana first photo 7+ years nunchi ne venake tiruguthuna kada ayna jali leda na mida! ipudu ayna aa yes nokesey ❤️', yq: 'Finally!', nq: 'Rethink 7 years?' },
-            { photo: 'me.jpg', question: 'Enough is enough!', sub: 'aa chaala ekkuva chesthunav Last warning inka! Yes nokkuthava leda! 😤', yq: 'Smart choice!', nq: "Can't catch me!" }
+            { photo: 'us-recent.png', question: 'Are you serious, Hepsiba?', sub: 'Niku na valentine avvali ani leda? chesina show chalu kani ippatiki ayna musukoni yes nokku 😢', yq: 'Much better!', nq: 'Getting harder?' },
+            { photo: 'us-first.png', question: 'Still no?', sub: 'vukuntuna ani rechipothunava? chodu mana first photo 7+ years nunchi ne venake tiruguthuna kada ayna jali leda na mida! ipudu ayna aa yes nokesey ❤️', yq: 'Finally!', nq: 'Rethink 7 years?' },
+            { photo: 'me.png', question: 'Enough is enough!', sub: 'aa chaala ekkuva chesthunav Last warning inka! Yes nokkuthava leda! 😤', yq: 'Smart choice!', nq: "Can't catch me!" }
         ];
 
         noBtn.addEventListener('click', () => {
@@ -193,8 +189,8 @@
         noBtn.addEventListener('touchstart', moveButton);
 
         yesBtn.addEventListener('click', () => {
-            mainUI.innerHTML = `<h1 style="font-size: 4rem;">Naku telusu hepsiba nenu ante niku pichi! ❤️</h1><p class="sub-desc">Happy valentines day my Love, I Love You!</p>`;
-            bgImage.style.backgroundImage = "url('us-final.jpg')";
+            mainUI.innerHTML = `<h1 style="font-size: 3.5rem;">Naku telusu hepsiba nenu ante niku pichi! ❤️</h1><p class="sub-desc">Happy valentines day my Love, I Love You!</p>`;
+            bgImage.style.backgroundImage = "url('us-final.png')";
             bgImage.style.filter = "brightness(0.5)";
             document.getElementById('particles').style.display = 'none';
             startHearts();
