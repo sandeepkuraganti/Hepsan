@@ -22,12 +22,12 @@
             touch-action: manipulation;
         }
 
-        /* Full-Screen Background */
+        /* Full-Screen Dynamic Background */
         #bg-container { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 1; overflow: hidden; }
         #bg-image {
             width: 100%; height: 100%;
             background-image: url('us-main.png'); 
-            background-size: cover; background-position: center center;
+            background-size: cover; background-position: center;
             animation: kenBurns 25s infinite alternate ease-in-out;
             transition: background-image 1.2s ease-in-out;
             will-change: transform;
@@ -36,19 +36,12 @@
 
         .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--overlay-dark); z-index: 2; }
         
-        /* Floating Petal Particles */
+        /* Floating rose petals */
         #particles { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 3; }
-        .petal {
-            position: absolute;
-            background: linear-gradient(to bottom right, #ff5e7e, #ffc3a0);
-            border-radius: 150% 0 150% 0;
-            opacity: 0.5;
-            will-change: transform;
-            animation: fallRotate linear infinite;
-        }
+        .petal { position: absolute; background: linear-gradient(to bottom right, #ff5e7e, #ffc3a0); border-radius: 150% 0 150% 0; opacity: 0.5; will-change: transform; animation: fallRotate linear infinite; }
         @keyframes fallRotate { to { transform: translateY(120vh) rotate(720deg); } }
 
-        /* Login Screen */
+        /* Login Interface */
         #loginScreen {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0,0,0,0.95); display: flex; flex-direction: column;
@@ -59,18 +52,10 @@
             border: 1px solid rgba(255,255,255,0.2); text-align: center; color: white; width: 85%; max-width: 380px;
         }
         .login-card h2 { font-family: 'Dancing Script', cursive; font-size: clamp(1.4rem, 5vw, 2.1rem); margin-bottom: 1.5rem; line-height: 1.4; }
-        
-        input#pinInput {
-            width: 100%; padding: 15px; box-sizing: border-box; font-size: 1.5rem; border-radius: 15px; border: none;
-            text-align: center; letter-spacing: 10px; margin-bottom: 1.5rem; background: rgba(255,255,255,0.9);
-        }
+        input#pinInput { width: 100%; padding: 15px; box-sizing: border-box; font-size: 1.5rem; border-radius: 15px; border: none; text-align: center; letter-spacing: 10px; margin-bottom: 1.5rem; background: rgba(255,255,255,0.9); }
 
-        /* Journey UI Layer */
-        .ui-layer {
-            position: relative; z-index: 10; height: 100vh; display: none;
-            flex-direction: column; justify-content: center; align-items: center; text-align: center;
-            padding: 20px; color: white;
-        }
+        /* Journey UI Interface */
+        .ui-layer { position: relative; z-index: 10; height: 100vh; display: none; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 20px; color: white; }
         h1 { font-family: 'Dancing Script', cursive; font-size: clamp(2.2rem, 8vw, 4.2rem); margin-bottom: 20px; text-shadow: 2px 4px 15px rgba(0,0,0,0.8); line-height: 1.2; }
         .sub-desc { font-family: 'Dancing Script', cursive; font-size: clamp(1.3rem, 3vw, 2.2rem); margin-bottom: 30px; text-shadow: 2px 4px 15px rgba(0,0,0,0.8); line-height: 1.2; padding: 0 15px; }
 
@@ -81,32 +66,19 @@
         #noBtn { background: white; color: #333; position: relative; }
         .btn-quote { font-size: 0.85rem; opacity: 0.9; font-style: italic; min-height: 1.2rem; }
 
-        #smartPopup {
-            display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
-            background: rgba(217, 4, 41, 0.98); color: white; padding: 2rem; border-radius: 30px; z-index: 2000;
-            width: 80%; max-width: 400px; text-align: center; font-weight: bold; box-shadow: 0 20px 50px rgba(0,0,0,0.5);
-        }
+        #smartPopup { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(217, 4, 41, 0.98); color: white; padding: 2rem; border-radius: 30px; z-index: 2000; width: 80%; max-width: 400px; text-align: center; font-weight: bold; }
 
-        /* --- SECRET NOTE MODAL --- */
-        #secretModal {
-            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.9); z-index: 3000; justify-content: center; align-items: center;
-        }
-        .modal-card {
-            background: white; color: #333; padding: 2.5rem; border-radius: 30px;
-            width: 85%; max-width: 400px; text-align: center; position: relative;
-        }
+        /* Secret Note Card */
+        #secretModal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.92); z-index: 3000; justify-content: center; align-items: center; }
+        .modal-card { background: white; color: #333; padding: 2.5rem; border-radius: 30px; width: 85%; max-width: 400px; text-align: center; position: relative; box-shadow: 0 15px 40px rgba(0,0,0,0.5); }
         .modal-card h3 { font-family: 'Dancing Script', cursive; font-size: 2.5rem; color: var(--primary-red); margin-bottom: 1rem; }
-        .close-modal { position: absolute; top: 15px; right: 20px; font-size: 1.5rem; cursor: pointer; opacity: 0.5; }
+        .close-modal { position: absolute; top: 15px; right: 20px; font-size: 1.8rem; cursor: pointer; opacity: 0.4; }
 
         .heart-particle { position: fixed; pointer-events: none; animation: floatUp 4s linear forwards; z-index: 5; }
         @keyframes floatUp { 0% { transform: translateY(100vh) scale(0); opacity: 1; } 100% { transform: translateY(-10vh) scale(2); opacity: 0; } }
     </style>
 </head>
 <body>
-
-    <audio id="clickSound" src="https://www.soundjay.com/buttons/sounds/button-16.mp3" preload="auto"></audio>
-    <audio id="successSound" src="https://www.soundjay.com/buttons/sounds/button-09.mp3" preload="auto"></audio>
 
     <div id="bg-container"><div id="bg-image"></div></div>
     <div class="overlay"></div>
@@ -127,11 +99,10 @@
         <div class="modal-card">
             <span class="close-modal" onclick="closeSecret()">×</span>
             <h3>Dear Hepsiba...</h3>
-            <p style="font-size: 1.1rem; line-height: 1.6;">
-                7+ years of us, and every day still feels like the first spark. 
-                Thank you for being my strength and my smile. 
-                I will always be right here, loving you. ❤️
+            <p style="font-size: 1.15rem; line-height: 1.6; font-family: 'Montserrat', sans-serif;">
+                Seven years ago, we started a journey that changed my life forever. From our first meeting to all the smiles we've shared since, every day with you has been a gift. I know I made you chase that 'No' button today, but my answer for you has always been 'Yes.' Thank you for being by my side.
             </p>
+            <p style="font-weight: bold; color: var(--primary-red); margin-top: 15px;">— Sandeep</p>
         </div>
     </div>
 
@@ -158,17 +129,11 @@
         const unlockBtn = document.getElementById('unlockBtn');
         const errorMsg = document.getElementById('errorMsg');
         const mainUI = document.getElementById('mainUI');
-        
-        const clickSound = document.getElementById('clickSound');
-        const successSound = document.getElementById('successSound');
 
-        function playClick() { clickSound.currentTime = 0; clickSound.play().catch(() => {}); }
-        function playSuccess() { successSound.currentTime = 0; successSound.play().catch(() => {}); }
-
-        function showSecret() { playClick(); document.getElementById('secretModal').style.display = 'flex'; }
+        function showSecret() { document.getElementById('secretModal').style.display = 'flex'; }
         function closeSecret() { document.getElementById('secretModal').style.display = 'none'; }
 
-        // Preload images
+        // Image preloading for smooth transitions
         const imagesToPreload = ['us-recent.png', 'us-first.png', 'me.png', 'us-final.png'];
         imagesToPreload.forEach(src => { const img = new Image(); img.src = src; });
 
@@ -189,7 +154,6 @@
 
         unlockBtn.addEventListener('click', () => {
             if (pinInput.value === SECRET_PIN) {
-                playClick(); 
                 loginScreen.style.opacity = '0';
                 setTimeout(() => { loginScreen.style.display = 'none'; mainUI.style.display = 'flex'; }, 800);
             } else { errorMsg.style.display = 'block'; pinInput.value = ''; }
@@ -214,7 +178,6 @@
 
         noBtn.addEventListener('click', () => {
             if (currentStep < 3) {
-                playClick(); 
                 const step = contentSteps[currentStep];
                 bgImage.style.backgroundImage = `url('${step.photo}')`;
                 questionText.innerHTML = step.question;
@@ -228,7 +191,6 @@
 
         const moveButton = (e) => {
             if (currentStep === 3) {
-                playClick(); 
                 noAvoidCount++;
                 if (noAvoidCount >= 2) {
                     popup.style.display = 'block';
@@ -244,11 +206,10 @@
         noBtn.addEventListener('touchstart', moveButton);
 
         yesBtn.addEventListener('click', () => {
-            playSuccess(); 
             mainUI.innerHTML = `
                 <h1 style="font-size: clamp(2.2rem, 8vw, 4rem);">Naku telusu hepsiba nenu ante niku pichi! ❤️</h1>
                 <p class="sub-desc">Happy valentines day my Love, I Love You!</p>
-                <div id="secretHeart" onclick="showSecret()" style="position:fixed; bottom:20px; right:20px; font-size:1.5rem; opacity:0.3; cursor:pointer;">❤️</div>
+                <div id="secretHeart" onclick="showSecret()" style="position:fixed; bottom:25px; right:25px; font-size:1.8rem; opacity:0.25; cursor:pointer; z-index:4000;">❤️</div>
             `;
             bgImage.style.backgroundImage = "url('us-final.png')";
             bgImage.style.filter = "brightness(0.45)";
