@@ -22,7 +22,6 @@
             touch-action: manipulation;
         }
 
-        /* Full-Screen Zoom Background */
         #bg-container { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 1; overflow: hidden; }
         #bg-image {
             width: 100%; height: 100%;
@@ -39,7 +38,7 @@
         .petal { position: absolute; background: linear-gradient(to bottom right, #ff5e7e, #ffc3a0); border-radius: 150% 0 150% 0; opacity: 0.5; will-change: transform; animation: fallRotate linear infinite; }
         @keyframes fallRotate { to { transform: translateY(120vh) rotate(720deg); } }
 
-        /* Login Screen */
+        /* Login UI */
         #loginScreen {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0,0,0,0.95); display: flex; flex-direction: column;
@@ -51,7 +50,7 @@
         }
         input#pinInput { width: 100%; padding: 15px; box-sizing: border-box; font-size: 1.5rem; border-radius: 15px; border: none; text-align: center; letter-spacing: 10px; margin-bottom: 1.5rem; background: rgba(255,255,255,0.9); }
 
-        /* UI Styles */
+        /* Journey UI */
         .ui-layer { position: relative; z-index: 10; height: 100vh; display: none; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 20px; color: white; }
         h1 { font-family: 'Dancing Script', cursive; font-size: clamp(2rem, 8vw, 4rem); margin-bottom: 10px; text-shadow: 2px 4px 15px rgba(0,0,0,0.8); line-height: 1.2; }
         .sub-desc { font-family: 'Dancing Script', cursive; font-size: clamp(1.3rem, 3vw, 2.2rem); margin-bottom: 20px; text-shadow: 2px 4px 15px rgba(0,0,0,0.8); line-height: 1.2; }
@@ -70,13 +69,22 @@
         #challengeHint { font-family: 'Dancing Script', cursive; font-size: 1.4rem; color: #ffb3c1; opacity: 0; transition: opacity 2s ease; margin-top: 10px; z-index: 3500; }
 
         /* Growing Heart */
-        #secretHeart { position: fixed; bottom: 25px; left: 50%; font-size: 1.5rem; cursor: pointer; z-index: 3600; animation: growHeartCenter 60s linear forwards; transform-origin: center bottom; }
-        @keyframes growHeartCenter { 0% { transform: translateX(-50%) scale(1); opacity: 0.1; } 100% { transform: translateX(-50%) scale(6); opacity: 0.6; } }
+        #secretHeart {
+            position: fixed; bottom: 25px; left: 50%; 
+            font-size: 1.5rem; cursor: pointer; z-index: 3600;
+            animation: growHeartCenter 60s linear forwards;
+            transform-origin: center bottom;
+        }
+
+        @keyframes growHeartCenter {
+            0% { transform: translateX(-50%) scale(1); opacity: 0.1; }
+            100% { transform: translateX(-50%) scale(6); opacity: 0.6; }
+        }
 
         .heart-particle { position: fixed; pointer-events: none; animation: floatUp 4s linear forwards; z-index: 5; }
         @keyframes floatUp { 0% { transform: translateY(100vh) scale(0); opacity: 1; } 100% { transform: translateY(-10vh) scale(2); opacity: 0; } }
         
-        /* Hidden YouTube Container */
+        /* YouTube Container */
         #yt-player { position: absolute; width: 1px; height: 1px; opacity: 0; pointer-events: none; }
     </style>
 </head>
@@ -121,7 +129,7 @@
     </div>
 
     <script>
-        const SECRET_PIN = "0512";
+        const SECRET_PIN = "0512"; 
         const loginScreen = document.getElementById('loginScreen');
         const pinInput = document.getElementById('pinInput');
         const unlockBtn = document.getElementById('unlockBtn');
@@ -130,28 +138,27 @@
         function showSecret() { document.getElementById('secretModal').style.display = 'flex'; }
         function closeSecret() { document.getElementById('secretModal').style.display = 'none'; }
 
-        // YouTube API
+        // YouTube Player Logic
         let player;
         function onYouTubeIframeAPIReady() {
             player = new YT.Player('yt-player', {
                 height: '1',
                 width: '1',
-                videoId: 'YOUR_VIDEO_ID_HERE', // <-- REPLACE THIS ID
-                playerVars: { 'autoplay': 0, 'controls': 0, 'loop': 1, 'playlist': 'YOUR_VIDEO_ID_HERE' },
+                videoId: 'o55BETmPVnE',
+                playerVars: { 'autoplay': 0, 'controls': 0, 'loop': 1, 'playlist': 'o55BETmPVnE' },
                 events: { 'onReady': onPlayerReady }
             });
         }
-        function onPlayerReady(event) { /* Player is ready but not playing yet */ }
+        function onPlayerReady(event) { event.target.setVolume(70); }
 
         unlockBtn.addEventListener('click', () => {
             if (pinInput.value === SECRET_PIN) {
-                if (player) player.playVideo(); // Start music on unlock
+                if (player) player.playVideo(); // Music starts on Unlock
                 loginScreen.style.opacity = '0';
                 setTimeout(() => { loginScreen.style.display = 'none'; mainUI.style.display = 'flex'; }, 800);
             } else { pinInput.value = ''; alert("Wrong PIN ❤️"); }
         });
 
-        // Preload images
         const imagesToPreload = ['us-recent.png', 'us-first.png', 'me.png', 'us-final.png'];
         imagesToPreload.forEach(src => { const img = new Image(); img.src = src; });
 
