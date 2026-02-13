@@ -22,7 +22,6 @@
             touch-action: manipulation;
         }
 
-        /* Full-Screen Zoom Background */
         #bg-container { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 1; overflow: hidden; }
         #bg-image {
             width: 100%; height: 100%;
@@ -39,7 +38,6 @@
         .petal { position: absolute; background: linear-gradient(to bottom right, #ff5e7e, #ffc3a0); border-radius: 150% 0 150% 0; opacity: 0.5; will-change: transform; animation: fallRotate linear infinite; }
         @keyframes fallRotate { to { transform: translateY(120vh) rotate(720deg); } }
 
-        /* Login Screen Logic */
         #loginScreen {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0,0,0,0.95); display: flex; flex-direction: column;
@@ -51,7 +49,6 @@
         }
         input#pinInput { width: 100%; padding: 15px; box-sizing: border-box; font-size: 1.5rem; border-radius: 15px; border: none; text-align: center; letter-spacing: 10px; margin-bottom: 1.5rem; background: rgba(255,255,255,0.9); }
 
-        /* UI Styles */
         .ui-layer { position: relative; z-index: 10; height: 100vh; display: none; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 20px; color: white; }
         h1 { font-family: 'Dancing Script', cursive; font-size: clamp(2rem, 8vw, 4rem); margin-bottom: 10px; text-shadow: 2px 4px 15px rgba(0,0,0,0.8); line-height: 1.2; }
         .sub-desc { font-family: 'Dancing Script', cursive; font-size: clamp(1.3rem, 3vw, 2.2rem); margin-bottom: 20px; text-shadow: 2px 4px 15px rgba(0,0,0,0.8); line-height: 1.2; }
@@ -62,13 +59,14 @@
         #noBtn { background: white; color: #333; position: relative; }
 
         /* Secret Modal Stylings */
-        #secretModal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.92); z-index: 4000; justify-content: center; align-items: center; }
-        .modal-card { background: white; color: #333; padding: 2.5rem; border-radius: 30px; width: 85%; max-width: 400px; text-align: center; position: relative; box-shadow: 0 15px 40px rgba(0,0,0,0.5); }
+        #secretModal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.94); z-index: 4000; justify-content: center; align-items: center; }
+        .modal-card { background: white; color: #333; padding: 2.5rem; border-radius: 30px; width: 85%; max-width: 450px; text-align: center; position: relative; box-shadow: 0 15px 40px rgba(0,0,0,0.5); overflow-y: auto; max-height: 90vh; }
+        .modal-card h3 { font-family: 'Dancing Script', cursive; font-size: 2.2rem; color: var(--primary-red); margin-bottom: 1rem; }
         .close-modal { position: absolute; top: 15px; right: 20px; font-size: 1.8rem; cursor: pointer; opacity: 0.4; }
 
         #challengeHint { font-family: 'Dancing Script', cursive; font-size: 1.4rem; color: #ffb3c1; opacity: 0; transition: opacity 2s ease; margin-top: 10px; z-index: 3500; }
 
-        /* UPDATED: GROWING HEART IN BOTTOM-CENTER */
+        /* GROWING HEART IN BOTTOM-CENTER */
         #secretHeart {
             position: fixed; bottom: 25px; left: 50%; 
             font-size: 1.5rem; cursor: pointer; z-index: 3600;
@@ -102,11 +100,16 @@
     <div id="secretModal">
         <div class="modal-card">
             <span class="close-modal" onclick="closeSecret()">×</span>
-            <h3 style="font-family: 'Dancing Script'; color: var(--primary-red); font-size: 2.5rem;">Dear Hepsiba...</h3>
-            <p style="font-size: 1.15rem; line-height: 1.6; font-family: 'Montserrat', sans-serif;">
-                Seven years ago, we started a journey that changed my life forever. From our first meeting to all the smiles since, every day with you has been a gift. I know I made you chase that 'No' button today, but my answer has always been 'Yes.' Thank you for being mine. ❤️
+            <h3>Priyapaina Hepsiba...</h3>
+            <p style="font-size: 1.05rem; line-height: 1.6; text-align: left; font-family: 'Montserrat', sans-serif;">
+                7 samvathsaralu kritham modalyna mana prema, kani ento ninu modhati sari chusina aa kshanam naku inka ninna monna la ne anipisthundi.<br><br>
+                Idhi emi thakuva kalam kadu, ala ani netho una samayam naku sariponu ledu, Emo e yedu samavtharalu debbai samavtharalu ayna naku ilane anipisthadi emo.<br><br>
+                Chala telusukunam, chala nerchukunam. Kani prathi godava inko kotha patan nerputhune undi, manaki mana gurinchi teliyani oka kotha vishyani bayta pedthune undi.<br><br>
+                Prathi godava manalni inka dagara chesthune vasthundi, nuvu lekapothe na jevitham ela untundo naku chupisthune vasthundi.<br><br>
+                E valentine's day nunchi ayna ninu badapetakunda undataniki try chestha( adhi avadhu le ani manusulo anukunte naku vinapadadhu anukuntunava 😒)<br><br>
+                Ela ayna e janma ki nanu bharinchi , Na valentine aypothava?
             </p>
-            <p style="font-weight: bold; margin-top: 15px;">— Sandeep</p>
+            <p style="font-weight: bold; margin-top: 15px; color: var(--primary-red); font-size: 1.2rem;">itlu ne sandeep rao</p>
         </div>
     </div>
 
@@ -129,7 +132,6 @@
         function showSecret() { document.getElementById('secretModal').style.display = 'flex'; }
         function closeSecret() { document.getElementById('secretModal').style.display = 'none'; }
 
-        // Preload PNG images
         const imagesToPreload = ['us-recent.png', 'us-first.png', 'me.png', 'us-final.png'];
         imagesToPreload.forEach(src => { const img = new Image(); img.src = src; });
 
@@ -161,7 +163,6 @@
         const questionText = document.getElementById('question');
         const subText = document.getElementById('subText');
 
-        // Telugu Timeline Content
         const contentSteps = [
             { photo: 'us-recent.png', question: 'Are you serious?', sub: 'Chesina show chalu kani ippatiki ayna yes nokku 😢' },
             { photo: 'us-first.png', question: 'Still no?', sub: 'Mana 7+ years history gurinchi ayna jali leda! ❤️' },
