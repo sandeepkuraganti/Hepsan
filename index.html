@@ -16,27 +16,38 @@
             margin: 0; padding: 0;
             width: 100%; height: 100%;
             overflow: hidden;
-            background-color: #000;
+            background-color: #1a1a1a; /* Dark gray instead of pure black for better feel */
             font-family: 'Montserrat', sans-serif;
             touch-action: manipulation;
         }
 
-        /* Full-Screen Aspect Ratio Background */
         #bg-container { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 1; overflow: hidden; }
+        
         #bg-image {
             width: 100%; height: 100%;
-            background-image: url('us-main.png'); /* Updated to PNG */
-            background-size: cover;
-            background-position: center center;
+            background-image: url('us-main.png');
+            background-size: cover; background-position: center;
             animation: kenBurns 25s infinite alternate ease-in-out;
             transition: background-image 1.2s ease-in-out;
+            /* Performance: Hardware acceleration */
+            will-change: transform;
         }
-        @keyframes kenBurns { 0% { transform: scale(1); } 100% { transform: scale(1.15); } }
+
+        @keyframes kenBurns { 0% { transform: scale(1); } 100% { transform: scale(1.12); } }
 
         .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--overlay-dark); z-index: 2; }
+        
+        /* Particle System Optimization */
         #particles { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 3; }
-        .snow { position: absolute; background: white; border-radius: 50%; opacity: 0.5; animation: fall linear infinite; }
-        @keyframes fall { to { transform: translateY(110vh); } }
+        .petal {
+            position: absolute;
+            background: linear-gradient(to bottom right, #ff5e7e, #ffc3a0);
+            border-radius: 150% 0 150% 0;
+            opacity: 0.5;
+            will-change: transform;
+            animation: fallRotate linear infinite;
+        }
+        @keyframes fallRotate { to { transform: translateY(120vh) rotate(720deg); } }
 
         /* Login Screen */
         #loginScreen {
@@ -48,14 +59,13 @@
             background: var(--glass); backdrop-filter: blur(20px); padding: 2.5rem; border-radius: 30px;
             border: 1px solid rgba(255,255,255,0.2); text-align: center; color: white; width: 85%; max-width: 350px;
         }
-        .login-card h2 { font-family: 'Dancing Script', cursive; font-size: clamp(1.5rem, 5vw, 2.2rem); margin-bottom: 1.5rem; line-height: 1.4; }
+        .login-card h2 { font-family: 'Dancing Script', cursive; font-size: clamp(1.4rem, 5vw, 2.1rem); margin-bottom: 1.5rem; line-height: 1.4; }
         
         input#pinInput {
             width: 100%; padding: 15px; box-sizing: border-box; font-size: 1.5rem; border-radius: 15px; border: none;
             text-align: center; letter-spacing: 10px; margin-bottom: 1.5rem; background: rgba(255,255,255,0.9);
         }
 
-        /* UI Layer */
         .ui-layer {
             position: relative; z-index: 10; height: 100vh; display: none;
             flex-direction: column; justify-content: center; align-items: center; text-align: center;
@@ -69,144 +79,4 @@
         .btn { padding: 18px 45px; font-size: 1.1rem; font-weight: 700; border-radius: 60px; border: none; cursor: pointer; transition: all 0.3s; text-transform: uppercase; }
         #yesBtn { background: var(--primary-red); color: white; box-shadow: 0 10px 20px rgba(217, 4, 41, 0.4); }
         #noBtn { background: white; color: #333; position: relative; }
-        .btn-quote { font-size: 0.85rem; opacity: 0.8; font-style: italic; min-height: 1.2rem; }
-
-        #smartPopup {
-            display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
-            background: rgba(217, 4, 41, 0.98); color: white; padding: 2rem; border-radius: 30px; z-index: 2000;
-            width: 80%; max-width: 400px; text-align: center; font-weight: bold; box-shadow: 0 20px 50px rgba(0,0,0,0.5);
-        }
-        .heart-particle { position: fixed; pointer-events: none; animation: floatUp 4s linear forwards; z-index: 5; }
-        @keyframes floatUp { 0% { transform: translateY(100vh) scale(0); opacity: 1; } 100% { transform: translateY(-10vh) scale(2); opacity: 0; } }
-    </style>
-</head>
-<body>
-
-    <div id="bg-container"><div id="bg-image"></div></div>
-    <div class="overlay"></div>
-    <div id="particles"></div>
-
-    <div id="loginScreen">
-        <div class="login-card">
-            <h2>Gurthunda aa roju, nuvu nenu modatisari kalisam? ❤️<br>Niku gurthuntene idhi open avthundi</h2>
-            <input type="password" id="pinInput" placeholder="0000" maxlength="4" pattern="\d*">
-            <button class="btn" id="unlockBtn" style="background: var(--primary-red); color: white; width: 100%;">Unlock</button>
-            <p id="errorMsg" style="color: #ff4d6d; margin-top: 1rem; display: none;">Wrong PIN, try again ❤️</p>
-        </div>
-    </div>
-
-    <div id="smartPopup">Dont act smart! <br> You only have one option, and that is YES! 😉</div>
-
-    <div class="ui-layer" id="mainUI">
-        <h1 id="question">Hey Hepsiba,<br>Will you be my Valentine?</h1>
-        <p class="sub-desc" id="subText">No press chese antha dhairyam niku ledu ani naku telusu, so musukuni yes nokkesey</p>
-        <div class="btn-group">
-            <div class="btn-wrapper">
-                <button class="btn" id="yesBtn">Yes!</button>
-                <span class="btn-quote" id="yesQuote">The easiest choice.</span>
-            </div>
-            <div class="btn-wrapper">
-                <button class="btn" id="noBtn">No</button>
-                <span class="btn-quote" id="noQuote">I dare you to try.</span>
-            </div>
-        </div>
-    </div>
-
-    <script>
-        const SECRET_PIN = "0512";
-        const loginScreen = document.getElementById('loginScreen');
-        const pinInput = document.getElementById('pinInput');
-        const unlockBtn = document.getElementById('unlockBtn');
-        const errorMsg = document.getElementById('errorMsg');
-        const mainUI = document.getElementById('mainUI');
-
-        function createSnow() {
-            const particles = document.getElementById('particles');
-            for(let i=0; i<45; i++) {
-                const snow = document.createElement('div');
-                snow.className = 'snow';
-                const size = Math.random() * 5 + 2 + 'px';
-                snow.style.width = size; snow.style.height = size;
-                snow.style.left = Math.random() * 100 + 'vw';
-                snow.style.animationDuration = Math.random() * 6 + 6 + 's';
-                snow.style.animationDelay = Math.random() * 5 + 's';
-                particles.appendChild(snow);
-            }
-        }
-        createSnow();
-
-        unlockBtn.addEventListener('click', () => {
-            if (pinInput.value === SECRET_PIN) {
-                loginScreen.style.opacity = '0';
-                setTimeout(() => { loginScreen.style.display = 'none'; mainUI.style.display = 'flex'; }, 800);
-            } else { errorMsg.style.display = 'block'; pinInput.value = ''; }
-        });
-
-        let currentStep = 0;
-        let noAvoidCount = 0;
-        const noBtn = document.getElementById('noBtn');
-        const yesBtn = document.getElementById('yesBtn');
-        const bgImage = document.getElementById('bg-image');
-        const questionText = document.getElementById('question');
-        const subText = document.getElementById('subText');
-        const yesQuote = document.getElementById('yesQuote');
-        const noQuote = document.getElementById('noQuote');
-        const popup = document.getElementById('smartPopup');
-
-        const contentSteps = [
-            { photo: 'us-recent.png', question: 'Are you serious, Hepsiba?', sub: 'Niku na valentine avvali ani leda? chesina show chalu kani ippatiki ayna musukoni yes nokku 😢', yq: 'Much better!', nq: 'Getting harder?' },
-            { photo: 'us-first.png', question: 'Still no?', sub: 'vukuntuna ani rechipothunava? chodu mana first photo 7+ years nunchi ne venake tiruguthuna kada ayna jali leda na mida! ipudu ayna aa yes nokesey ❤️', yq: 'Finally!', nq: 'Rethink 7 years?' },
-            { photo: 'me.png', question: 'Enough is enough!', sub: 'aa chaala ekkuva chesthunav Last warning inka! Yes nokkuthava leda! 😤', yq: 'Smart choice!', nq: "Can't catch me!" }
-        ];
-
-        noBtn.addEventListener('click', () => {
-            if (currentStep < 3) {
-                const step = contentSteps[currentStep];
-                bgImage.style.backgroundImage = `url('${step.photo}')`;
-                questionText.innerHTML = step.question;
-                subText.innerHTML = step.sub;
-                yesQuote.innerText = step.yq;
-                noQuote.innerText = step.nq;
-                currentStep++;
-                if (currentStep === 3) { noBtn.style.backgroundColor = "#d90429"; noBtn.style.color = "white"; }
-            }
-        });
-
-        const moveButton = (e) => {
-            if (currentStep === 3) {
-                noAvoidCount++;
-                if (noAvoidCount >= 2) {
-                    popup.style.display = 'block';
-                    setTimeout(() => { popup.style.display = 'none'; }, 2500);
-                }
-                const x = Math.random() * (window.innerWidth - noBtn.offsetWidth - 40) + 20;
-                const y = Math.random() * (window.innerHeight - noBtn.offsetHeight - 40) + 20;
-                noBtn.style.position = 'fixed'; noBtn.style.left = `${x}px`; noBtn.style.top = `${y}px`;
-            }
-        };
-
-        noBtn.addEventListener('mouseover', moveButton);
-        noBtn.addEventListener('touchstart', moveButton);
-
-        yesBtn.addEventListener('click', () => {
-            mainUI.innerHTML = `<h1 style="font-size: 3.5rem;">Naku telusu hepsiba nenu ante niku pichi! ❤️</h1><p class="sub-desc">Happy valentines day my Love, I Love You!</p>`;
-            bgImage.style.backgroundImage = "url('us-final.png')";
-            bgImage.style.filter = "brightness(0.5)";
-            document.getElementById('particles').style.display = 'none';
-            startHearts();
-        });
-
-        function startHearts() {
-            setInterval(() => {
-                const heart = document.createElement('div');
-                heart.className = 'heart-particle';
-                heart.innerHTML = '❤️';
-                heart.style.left = Math.random() * 100 + 'vw';
-                heart.style.fontSize = (Math.random() * 30 + 20) + 'px';
-                document.body.appendChild(heart);
-                setTimeout(() => heart.remove(), 4000);
-            }, 100);
-        }
-    </script>
-</body>
-</html>
+        .btn-quote { font-size: 0.85rem; opacity: 0.
