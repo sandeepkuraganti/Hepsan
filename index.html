@@ -8,7 +8,7 @@
     <style>
         :root {
             --primary-red: #d90429;
-            --overlay-dark: rgba(0, 0, 0, 0.5);
+            --overlay-dark: rgba(0, 0, 0, 0.55);
             --glass: rgba(255, 255, 255, 0.1);
             --fallback-pink: #fff0f3;
         }
@@ -17,17 +17,17 @@
             margin: 0; padding: 0;
             width: 100%; height: 100%;
             overflow: hidden;
-            background-color: var(--fallback-pink); /* Instant fallback color */
+            background-color: var(--fallback-pink);
             font-family: 'Montserrat', sans-serif;
             touch-action: manipulation;
         }
 
-        /* Full-Screen Dynamic Background */
+        /* Full-Screen Aspect Ratio Background with Zoom */
         #bg-container { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 1; overflow: hidden; }
         #bg-image {
             width: 100%; height: 100%;
             background-image: url('us-main.png'); 
-            background-size: cover; background-position: center;
+            background-size: cover; background-position: center center;
             animation: kenBurns 25s infinite alternate ease-in-out;
             transition: background-image 1.2s ease-in-out;
             will-change: transform;
@@ -36,10 +36,17 @@
 
         .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--overlay-dark); z-index: 2; }
         
-        /* Floating Particles */
+        /* Floating Petal Particles */
         #particles { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 3; }
-        .snow { position: absolute; background: white; border-radius: 50%; opacity: 0.5; will-change: transform; animation: fall linear infinite; }
-        @keyframes fall { to { transform: translateY(110vh); } }
+        .petal {
+            position: absolute;
+            background: linear-gradient(to bottom right, #ff5e7e, #ffc3a0);
+            border-radius: 150% 0 150% 0;
+            opacity: 0.5;
+            will-change: transform;
+            animation: fallRotate linear infinite;
+        }
+        @keyframes fallRotate { to { transform: translateY(120vh) rotate(720deg); } }
 
         /* Login Screen */
         #loginScreen {
@@ -58,7 +65,7 @@
             text-align: center; letter-spacing: 10px; margin-bottom: 1.5rem; background: rgba(255,255,255,0.9);
         }
 
-        /* UI Layer */
+        /* Journey UI Layer */
         .ui-layer {
             position: relative; z-index: 10; height: 100vh; display: none;
             flex-direction: column; justify-content: center; align-items: center; text-align: center;
@@ -84,6 +91,9 @@
     </style>
 </head>
 <body>
+
+    <audio id="clickSound" src="https://www.soundjay.com/buttons/sounds/button-16.mp3" preload="auto"></audio>
+    <audio id="successSound" src="https://www.soundjay.com/buttons/sounds/button-09.mp3" preload="auto"></audio>
 
     <div id="bg-container"><div id="bg-image"></div></div>
     <div class="overlay"></div>
@@ -117,34 +127,44 @@
     </div>
 
     <script>
-        const SECRET_PIN = "0512";
+        const SECRET_PIN = "0512"; //
         const loginScreen = document.getElementById('loginScreen');
         const pinInput = document.getElementById('pinInput');
         const unlockBtn = document.getElementById('unlockBtn');
         const errorMsg = document.getElementById('errorMsg');
         const mainUI = document.getElementById('mainUI');
+        
+        const clickSound = document.getElementById('clickSound');
+        const successSound = document.getElementById('successSound');
 
-        // PRELOADING: Starts downloading images immediately
+        // Helper functions for audio
+        function playClick() { clickSound.currentTime = 0; clickSound.play().catch(() => {}); }
+        function playSuccess() { successSound.currentTime = 0; successSound.play().catch(() => {}); }
+
+        // Performance: Preload images
         const imagesToPreload = ['us-recent.png', 'us-first.png', 'me.png', 'us-final.png'];
         imagesToPreload.forEach(src => { const img = new Image(); img.src = src; });
 
-        function createSnow() {
+        // Animation: Falling Petals
+        function createPetals() {
             const particles = document.getElementById('particles');
-            for(let i=0; i<35; i++) {
-                const snow = document.createElement('div');
-                snow.className = 'snow';
-                const size = Math.random() * 5 + 2 + 'px';
-                snow.style.width = size; snow.style.height = size;
-                snow.style.left = Math.random() * 100 + 'vw';
-                snow.style.animationDuration = Math.random() * 6 + 6 + 's';
-                snow.style.animationDelay = Math.random() * 5 + 's';
-                particles.appendChild(snow);
+            for(let i=0; i<30; i++) {
+                const petal = document.createElement('div');
+                petal.className = 'petal';
+                const size = Math.random() * 15 + 10 + 'px';
+                petal.style.width = size; petal.style.height = size;
+                petal.style.left = Math.random() * 100 + 'vw';
+                petal.style.animationDuration = Math.random() * 10 + 8 + 's';
+                petal.style.animationDelay = Math.random() * 5 + 's';
+                particles.appendChild(petal);
             }
         }
-        createSnow();
+        createPetals();
 
+        // Login Logic
         unlockBtn.addEventListener('click', () => {
             if (pinInput.value === SECRET_PIN) {
+                playClick(); 
                 loginScreen.style.opacity = '0';
                 setTimeout(() => { loginScreen.style.display = 'none'; mainUI.style.display = 'flex'; }, 800);
             } else { errorMsg.style.display = 'block'; pinInput.value = ''; }
@@ -161,6 +181,7 @@
         const noQuote = document.getElementById('noQuote');
         const popup = document.getElementById('smartPopup');
 
+        // Journey Steps
         const contentSteps = [
             { photo: 'us-recent.png', question: 'Are you serious, Hepsiba?', sub: 'Niku na valentine avvali ani leda? chesina show chalu kani ippatiki ayna musukoni yes nokku 😢', yq: 'Much better!', nq: 'Getting harder?' },
             { photo: 'us-first.png', question: 'Still no?', sub: 'vukuntuna ani rechipothunava? chodu mana first photo 7+ years nunchi ne venake tiruguthuna kada ayna jali leda na mida! ipudu ayna aa yes nokesey ❤️', yq: 'Finally!', nq: 'Rethink 7 years?' },
@@ -169,6 +190,7 @@
 
         noBtn.addEventListener('click', () => {
             if (currentStep < 3) {
+                playClick(); 
                 const step = contentSteps[currentStep];
                 bgImage.style.backgroundImage = `url('${step.photo}')`;
                 questionText.innerHTML = step.question;
@@ -180,8 +202,10 @@
             }
         });
 
+        // "No" button runaway logic
         const moveButton = (e) => {
             if (currentStep === 3) {
+                playClick(); 
                 noAvoidCount++;
                 if (noAvoidCount >= 2) {
                     popup.style.display = 'block';
@@ -196,7 +220,9 @@
         noBtn.addEventListener('mouseover', moveButton);
         noBtn.addEventListener('touchstart', moveButton);
 
+        // Final Celebration
         yesBtn.addEventListener('click', () => {
+            playSuccess(); 
             mainUI.innerHTML = `<h1 style="font-size: clamp(2.5rem, 8vw, 4rem);">Naku telusu hepsiba nenu ante niku pichi! ❤️</h1><p class="sub-desc">Happy valentines day my Love, I Love You!</p>`;
             bgImage.style.backgroundImage = "url('us-final.png')";
             bgImage.style.filter = "brightness(0.45)";
