@@ -38,7 +38,7 @@
         .petal { position: absolute; background: linear-gradient(to bottom right, #ff5e7e, #ffc3a0); border-radius: 150% 0 150% 0; opacity: 0.5; will-change: transform; animation: fallRotate linear infinite; }
         @keyframes fallRotate { to { transform: translateY(120vh) rotate(720deg); } }
 
-        /* Login UI */
+        /* Login Screen */
         #loginScreen {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0,0,0,0.95); display: flex; flex-direction: column;
@@ -50,17 +50,18 @@
         }
         input#pinInput { width: 100%; padding: 15px; box-sizing: border-box; font-size: 1.5rem; border-radius: 15px; border: none; text-align: center; letter-spacing: 10px; margin-bottom: 1.5rem; background: rgba(255,255,255,0.9); }
 
-        /* Journey UI */
+        /* UI Layer & Button Quotes */
         .ui-layer { position: relative; z-index: 10; height: 100vh; display: none; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 20px; color: white; }
         h1 { font-family: 'Dancing Script', cursive; font-size: clamp(2rem, 8vw, 4rem); margin-bottom: 10px; text-shadow: 2px 4px 15px rgba(0,0,0,0.8); line-height: 1.2; }
         .sub-desc { font-family: 'Dancing Script', cursive; font-size: clamp(1.3rem, 3vw, 2.2rem); margin-bottom: 20px; text-shadow: 2px 4px 15px rgba(0,0,0,0.8); line-height: 1.2; }
 
         .btn-group { display: flex; gap: 30px; align-items: flex-start; justify-content: center; width: 100%; }
+        .btn-wrapper { display: flex; flex-direction: column; align-items: center; gap: 8px; }
         .btn { padding: 18px 45px; font-size: 1.1rem; font-weight: 700; border-radius: 60px; border: none; cursor: pointer; transition: all 0.3s; text-transform: uppercase; }
         #yesBtn { background: var(--primary-red); color: white; box-shadow: 0 10px 20px rgba(217, 4, 41, 0.4); }
         #noBtn { background: white; color: #333; position: relative; }
+        .btn-quote { font-size: 0.85rem; opacity: 0.9; font-style: italic; min-height: 1.2rem; }
 
-        /* Secret Modal Stylings */
         #secretModal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.94); z-index: 4000; justify-content: center; align-items: center; }
         .modal-card { background: white; color: #333; padding: 2.5rem; border-radius: 30px; width: 85%; max-width: 450px; text-align: center; position: relative; box-shadow: 0 15px 40px rgba(0,0,0,0.5); overflow-y: auto; max-height: 90vh; }
         .modal-card h3 { font-family: 'Dancing Script', cursive; font-size: 2.2rem; color: var(--primary-red); margin-bottom: 1rem; }
@@ -69,22 +70,12 @@
         #challengeHint { font-family: 'Dancing Script', cursive; font-size: 1.4rem; color: #ffb3c1; opacity: 0; transition: opacity 2s ease; margin-top: 10px; z-index: 3500; }
 
         /* Growing Heart */
-        #secretHeart {
-            position: fixed; bottom: 25px; left: 50%; 
-            font-size: 1.5rem; cursor: pointer; z-index: 3600;
-            animation: growHeartCenter 60s linear forwards;
-            transform-origin: center bottom;
-        }
-
-        @keyframes growHeartCenter {
-            0% { transform: translateX(-50%) scale(1); opacity: 0.1; }
-            100% { transform: translateX(-50%) scale(6); opacity: 0.6; }
-        }
+        #secretHeart { position: fixed; bottom: 25px; left: 50%; font-size: 1.5rem; cursor: pointer; z-index: 3600; animation: growHeartCenter 60s linear forwards; transform-origin: center bottom; }
+        @keyframes growHeartCenter { 0% { transform: translateX(-50%) scale(1); opacity: 0.1; } 100% { transform: translateX(-50%) scale(6); opacity: 0.6; } }
 
         .heart-particle { position: fixed; pointer-events: none; animation: floatUp 4s linear forwards; z-index: 5; }
         @keyframes floatUp { 0% { transform: translateY(100vh) scale(0); opacity: 1; } 100% { transform: translateY(-10vh) scale(2); opacity: 0; } }
         
-        /* YouTube Container */
         #yt-player { position: absolute; width: 1px; height: 1px; opacity: 0; pointer-events: none; }
     </style>
 </head>
@@ -122,14 +113,22 @@
     <div class="ui-layer" id="mainUI">
         <h1 id="question">Hey Hepsiba,<br>Will you be my Valentine?</h1>
         <p class="sub-desc" id="subText">No press chese antha dhairyam niku ledu ani naku telusu...</p>
+        
         <div class="btn-group">
-            <div class="btn-wrapper"><button class="btn" id="yesBtn">Yes!</button></div>
-            <div class="btn-wrapper"><button class="btn" id="noBtn">No</button></div>
+            <div class="btn-wrapper">
+                <button class="btn" id="yesBtn">Yes!</button>
+                <span class="btn-quote" id="yesQuote">The easiest choice.</span>
+            </div>
+            <div class="btn-wrapper">
+                <button class="btn" id="noBtn">No</button>
+                <span class="btn-quote" id="noQuote">I dare you to try.</span>
+            </div>
         </div>
+        <div id="challengeHint">Mana 7 years gurinchi oka secret note dachesa, vethuku chudham! 😉</div>
     </div>
 
     <script>
-        const SECRET_PIN = "0512"; 
+        const SECRET_PIN = "0512";
         const loginScreen = document.getElementById('loginScreen');
         const pinInput = document.getElementById('pinInput');
         const unlockBtn = document.getElementById('unlockBtn');
@@ -138,12 +137,11 @@
         function showSecret() { document.getElementById('secretModal').style.display = 'flex'; }
         function closeSecret() { document.getElementById('secretModal').style.display = 'none'; }
 
-        // YouTube Player Logic
+        // BGM Logic
         let player;
         function onYouTubeIframeAPIReady() {
             player = new YT.Player('yt-player', {
-                height: '1',
-                width: '1',
+                height: '1', width: '1',
                 videoId: 'o55BETmPVnE',
                 playerVars: { 'autoplay': 0, 'controls': 0, 'loop': 1, 'playlist': 'o55BETmPVnE' },
                 events: { 'onReady': onPlayerReady }
@@ -153,7 +151,7 @@
 
         unlockBtn.addEventListener('click', () => {
             if (pinInput.value === SECRET_PIN) {
-                if (player) player.playVideo(); // Music starts on Unlock
+                if (player) player.playVideo();
                 loginScreen.style.opacity = '0';
                 setTimeout(() => { loginScreen.style.display = 'none'; mainUI.style.display = 'flex'; }, 800);
             } else { pinInput.value = ''; alert("Wrong PIN ❤️"); }
@@ -182,11 +180,13 @@
         const bgImage = document.getElementById('bg-image');
         const questionText = document.getElementById('question');
         const subText = document.getElementById('subText');
+        const yesQuote = document.getElementById('yesQuote');
+        const noQuote = document.getElementById('noQuote');
 
         const contentSteps = [
-            { photo: 'us-recent.png', question: 'Are you serious?', sub: 'Chesina show chalu kani ippatiki ayna yes nokku 😢' },
-            { photo: 'us-first.png', question: 'Still no?', sub: 'Mana 7+ years history gurinchi ayna jali leda! ❤️' },
-            { photo: 'me.png', question: 'Last warning inka!', sub: 'Yes nokkuthava leda! 😤' }
+            { photo: 'us-recent.png', question: 'Are you serious?', sub: 'Chesina show chalu kani ippatiki ayna yes nokku 😢', yq: 'Much better!', nq: 'Getting harder?' },
+            { photo: 'us-first.png', question: 'Still no?', sub: 'Mana 7+ years history gurinchi ayna jali leda! ❤️', yq: 'Finally!', nq: 'Rethink 7 years?' },
+            { photo: 'me.png', question: 'Last warning inka!', sub: 'Yes nokkuthava leda! 😤', yq: 'Smart choice!', nq: "Can't catch me!" }
         ];
 
         noBtn.addEventListener('click', () => {
@@ -195,6 +195,8 @@
                 bgImage.style.backgroundImage = `url('${step.photo}')`;
                 questionText.innerHTML = step.question;
                 subText.innerHTML = step.sub;
+                yesQuote.innerText = step.yq; // Restored updates
+                noQuote.innerText = step.nq;
                 currentStep++;
                 if (currentStep === 3) { noBtn.style.backgroundColor = "#d90429"; }
             }
@@ -209,16 +211,22 @@
         });
 
         yesBtn.addEventListener('click', () => {
+            // Final transition logic
             mainUI.innerHTML = `
                 <h1>Naku telusu hepsiba nenu ante niku pichi! ❤️</h1>
                 <p class="sub-desc">Happy valentines day my Love!</p>
-                <div id="challengeHint">Mana 7 years gurinchi oka secret note dachesa, vethuku chudham! 😉</div>
+                <div id="challengeHint" style="opacity:0">Mana 7 years gurinchi oka secret note dachesa, vethuku chudham! 😉</div>
                 <div id="secretHeart" onclick="showSecret()">❤️</div>
             `;
             bgImage.style.backgroundImage = "url('us-final.png')";
             bgImage.style.filter = "brightness(0.45)";
             document.getElementById('particles').style.display = 'none';
-            setTimeout(() => { const hint = document.getElementById('challengeHint'); if(hint) hint.style.opacity = '1'; }, 8000);
+            
+            setTimeout(() => { 
+                const hint = document.getElementById('challengeHint');
+                if(hint) hint.style.opacity = '1'; 
+            }, 8000);
+            
             startHearts();
         });
 
