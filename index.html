@@ -22,6 +22,7 @@
             touch-action: manipulation;
         }
 
+        /* Full-Screen Background with Ken Burns Zoom */
         #bg-container { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 1; overflow: hidden; }
         #bg-image {
             width: 100%; height: 100%;
@@ -38,6 +39,7 @@
         .petal { position: absolute; background: linear-gradient(to bottom right, #ff5e7e, #ffc3a0); border-radius: 150% 0 150% 0; opacity: 0.5; will-change: transform; animation: fallRotate linear infinite; }
         @keyframes fallRotate { to { transform: translateY(120vh) rotate(720deg); } }
 
+        /* Login Screen Logic */
         #loginScreen {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0,0,0,0.95); display: flex; flex-direction: column;
@@ -49,25 +51,25 @@
         }
         input#pinInput { width: 100%; padding: 15px; box-sizing: border-box; font-size: 1.5rem; border-radius: 15px; border: none; text-align: center; letter-spacing: 10px; margin-bottom: 1.5rem; background: rgba(255,255,255,0.9); }
 
+        /* General UI Styles */
         .ui-layer { position: relative; z-index: 10; height: 100vh; display: none; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 20px; color: white; }
-        h1 { font-family: 'Dancing Script', cursive; font-size: clamp(2rem, 8vw, 4rem); margin-bottom: 20px; text-shadow: 2px 4px 15px rgba(0,0,0,0.8); line-height: 1.2; }
-        .sub-desc { font-family: 'Dancing Script', cursive; font-size: clamp(1.3rem, 3vw, 2.2rem); margin-bottom: 30px; text-shadow: 2px 4px 15px rgba(0,0,0,0.8); line-height: 1.2; }
+        h1 { font-family: 'Dancing Script', cursive; font-size: clamp(2rem, 8vw, 4rem); margin-bottom: 10px; text-shadow: 2px 4px 15px rgba(0,0,0,0.8); line-height: 1.2; }
+        .sub-desc { font-family: 'Dancing Script', cursive; font-size: clamp(1.3rem, 3vw, 2.2rem); margin-bottom: 20px; text-shadow: 2px 4px 15px rgba(0,0,0,0.8); line-height: 1.2; }
 
         .btn-group { display: flex; gap: 30px; align-items: flex-start; justify-content: center; width: 100%; }
-        .btn-wrapper { display: flex; flex-direction: column; align-items: center; gap: 8px; }
         .btn { padding: 18px 45px; font-size: 1.1rem; font-weight: 700; border-radius: 60px; border: none; cursor: pointer; transition: all 0.3s; text-transform: uppercase; }
         #yesBtn { background: var(--primary-red); color: white; box-shadow: 0 10px 20px rgba(217, 4, 41, 0.4); }
         #noBtn { background: white; color: #333; position: relative; }
 
+        /* Secret Modal Stylings */
         #secretModal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.92); z-index: 3000; justify-content: center; align-items: center; }
         .modal-card { background: white; color: #333; padding: 2.5rem; border-radius: 30px; width: 85%; max-width: 400px; text-align: center; position: relative; box-shadow: 0 15px 40px rgba(0,0,0,0.5); }
         .close-modal { position: absolute; top: 15px; right: 20px; font-size: 1.8rem; cursor: pointer; opacity: 0.4; }
 
-        /* CHALLENGE HINT STYLING */
+        /* Challenge Hint Styling - Updated for Inline Flow */
         #challengeHint {
-            position: fixed; bottom: 80px; width: 100%; text-align: center;
-            font-family: 'Dancing Script', cursive; font-size: 1.4rem; color: white;
-            opacity: 0; transition: opacity 2s ease; pointer-events: none; z-index: 3500;
+            font-family: 'Dancing Script', cursive; font-size: 1.4rem; color: #ffb3c1;
+            opacity: 0; transition: opacity 2s ease; margin-top: 10px; z-index: 3500;
         }
 
         .heart-particle { position: fixed; pointer-events: none; animation: floatUp 4s linear forwards; z-index: 5; }
@@ -99,8 +101,6 @@
         </div>
     </div>
 
-    <div id="challengeHint">Mana 7 years gurinchi oka secret note dachesa, vethuku chudham! 😉</div>
-
     <div class="ui-layer" id="mainUI">
         <h1 id="question">Hey Hepsiba,<br>Will you be my Valentine?</h1>
         <p class="sub-desc" id="subText">No press chese antha dhairyam niku ledu ani naku telusu...</p>
@@ -111,7 +111,7 @@
     </div>
 
     <script>
-        const SECRET_PIN = "0512"; //
+        const SECRET_PIN = "0512";
         const loginScreen = document.getElementById('loginScreen');
         const pinInput = document.getElementById('pinInput');
         const unlockBtn = document.getElementById('unlockBtn');
@@ -120,7 +120,7 @@
         function showSecret() { document.getElementById('secretModal').style.display = 'flex'; }
         function closeSecret() { document.getElementById('secretModal').style.display = 'none'; }
 
-        // Preloading images
+        // Preloading images for speed
         const imagesToPreload = ['us-recent.png', 'us-first.png', 'me.png', 'us-final.png'];
         imagesToPreload.forEach(src => { const img = new Image(); img.src = src; });
 
@@ -152,6 +152,7 @@
         const questionText = document.getElementById('question');
         const subText = document.getElementById('subText');
 
+        // Telugu Content Timeline
         const contentSteps = [
             { photo: 'us-recent.png', question: 'Are you serious?', sub: 'Chesina show chalu kani ippatiki ayna yes nokku 😢' },
             { photo: 'us-first.png', question: 'Still no?', sub: 'Mana 7+ years history gurinchi ayna jali leda! ❤️' },
@@ -178,13 +179,22 @@
         });
 
         yesBtn.addEventListener('click', () => {
-            mainUI.innerHTML = `<h1>Naku telusu hepsiba nenu ante niku pichi! ❤️</h1><p class="sub-desc">Happy valentines day my Love!</p><div id="secretHeart" onclick="showSecret()" style="position:fixed; bottom:20px; right:20px; font-size:1.8rem; opacity:0.1; cursor:pointer; z-index:4000;">❤️</div>`;
+            // Updated final UI with hint positioned below sub-desc
+            mainUI.innerHTML = `
+                <h1>Naku telusu hepsiba nenu ante niku pichi! ❤️</h1>
+                <p class="sub-desc">Happy valentines day my Love!</p>
+                <div id="challengeHint">Mana 7 years gurinchi oka secret note dachesa, vethuku chudham! 😉</div>
+                <div id="secretHeart" onclick="showSecret()" style="position:fixed; bottom:20px; right:20px; font-size:1.8rem; opacity:0.1; cursor:pointer; z-index:4000;">❤️</div>
+            `;
             bgImage.style.backgroundImage = "url('us-final.png')";
             bgImage.style.filter = "brightness(0.45)";
             document.getElementById('particles').style.display = 'none';
             
-            // SHOW HINT AFTER 8 SECONDS
-            setTimeout(() => { document.getElementById('challengeHint').style.opacity = '1'; }, 8000);
+            // Wait 8 seconds before fading in the challenge hint
+            setTimeout(() => { 
+                const hint = document.getElementById('challengeHint');
+                if(hint) hint.style.opacity = '1'; 
+            }, 8000);
             
             startHearts();
         });
