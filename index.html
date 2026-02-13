@@ -16,7 +16,7 @@
         html, body {
             margin: 0; padding: 0;
             width: 100%; height: 100%;
-            overflow: hidden;
+            overflow: hidden; /* Keeps the runaway button contained */
             background-color: var(--fallback-pink);
             font-family: 'Montserrat', sans-serif;
             touch-action: manipulation;
@@ -50,24 +50,25 @@
         }
         input#pinInput { width: 100%; padding: 15px; box-sizing: border-box; font-size: 1.5rem; border-radius: 15px; border: none; text-align: center; letter-spacing: 10px; margin-bottom: 1.5rem; background: rgba(255,255,255,0.9); }
 
-        /* UI Layer & Button Quotes */
+        /* UI Layer */
         .ui-layer { position: relative; z-index: 10; height: 100vh; display: none; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 20px; color: white; }
         h1 { font-family: 'Dancing Script', cursive; font-size: clamp(2rem, 8vw, 4rem); margin-bottom: 10px; text-shadow: 2px 4px 15px rgba(0,0,0,0.8); line-height: 1.2; }
-        .sub-desc { font-family: 'Dancing Script', cursive; font-size: clamp(1.3rem, 3vw, 2.2rem); margin-bottom: 20px; text-shadow: 2px 4px 15px rgba(0,0,0,0.8); line-height: 1.2; }
+        .sub-desc { font-family: 'Dancing Script', cursive; font-size: clamp(1.1rem, 3vw, 2.2rem); margin-bottom: 20px; text-shadow: 2px 4px 15px rgba(0,0,0,0.8); line-height: 1.2; }
 
-        .btn-group { display: flex; gap: 30px; align-items: flex-start; justify-content: center; width: 100%; }
-        .btn-wrapper { display: flex; flex-direction: column; align-items: center; gap: 8px; }
-        .btn { padding: 18px 45px; font-size: 1.1rem; font-weight: 700; border-radius: 60px; border: none; cursor: pointer; transition: all 0.3s; text-transform: uppercase; }
+        .btn-group { display: flex; gap: 20px; align-items: flex-start; justify-content: center; width: 100%; }
+        .btn-wrapper { display: flex; flex-direction: column; align-items: center; gap: 8px; width: 140px; }
+        .btn { width: 100%; padding: 15px 0; font-size: 1rem; font-weight: 700; border-radius: 60px; border: none; cursor: pointer; transition: all 0.3s; text-transform: uppercase; }
         #yesBtn { background: var(--primary-red); color: white; box-shadow: 0 10px 20px rgba(217, 4, 41, 0.4); }
-        #noBtn { background: white; color: #333; position: relative; }
-        .btn-quote { font-size: 0.85rem; opacity: 0.9; font-style: italic; min-height: 1.2rem; }
+        #noBtn { background: white; color: #333; position: relative; z-index: 50; }
+        .btn-quote { font-size: 0.8rem; opacity: 0.9; font-style: italic; min-height: 1.2rem; }
 
+        /* Secret Modal (Scrollable) */
         #secretModal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.94); z-index: 4000; justify-content: center; align-items: center; }
-        .modal-card { background: white; color: #333; padding: 2.5rem; border-radius: 30px; width: 85%; max-width: 450px; text-align: center; position: relative; box-shadow: 0 15px 40px rgba(0,0,0,0.5); overflow-y: auto; max-height: 90vh; }
+        .modal-card { background: white; color: #333; padding: 2rem; border-radius: 30px; width: 85%; max-width: 450px; text-align: center; position: relative; box-shadow: 0 15px 40px rgba(0,0,0,0.5); overflow-y: auto; max-height: 80vh; }
         .modal-card h3 { font-family: 'Dancing Script', cursive; font-size: 2.2rem; color: var(--primary-red); margin-bottom: 1rem; }
         .close-modal { position: absolute; top: 15px; right: 20px; font-size: 1.8rem; cursor: pointer; opacity: 0.4; }
 
-        #challengeHint { font-family: 'Dancing Script', cursive; font-size: 1.4rem; color: #ffb3c1; opacity: 0; transition: opacity 2s ease; margin-top: 10px; z-index: 3500; }
+        #challengeHint { font-family: 'Dancing Script', cursive; font-size: 1.2rem; color: #ffb3c1; opacity: 0; transition: opacity 2s ease; margin-top: 15px; z-index: 3500; }
 
         /* Growing Heart */
         #secretHeart { position: fixed; bottom: 25px; left: 50%; font-size: 1.5rem; cursor: pointer; z-index: 3600; animation: growHeartCenter 60s linear forwards; transform-origin: center bottom; }
@@ -90,7 +91,7 @@
         <div class="login-card">
             <h2 style="font-family: 'Dancing Script';">Gurthunda aa roju, nuvu nenu modatisari kalisam? ❤️</h2>
             <input type="password" id="pinInput" placeholder="0000" maxlength="4" pattern="\d*">
-            <button class="btn" id="unlockBtn" style="background: var(--primary-red); color: white; width: 100%;">Unlock</button>
+            <button class="btn" id="unlockBtn" style="background: var(--primary-red); color: white;">Unlock</button>
         </div>
     </div>
 
@@ -98,7 +99,7 @@
         <div class="modal-card">
             <span class="close-modal" onclick="closeSecret()">×</span>
             <h3>Priyapaina Hepsiba...</h3>
-            <p style="font-size: 1.05rem; line-height: 1.6; text-align: left; font-family: 'Montserrat', sans-serif;">
+            <p style="font-size: 1rem; line-height: 1.6; text-align: left; font-family: 'Montserrat', sans-serif;">
                 7 samvathsaralu kritham modalyna mana prema, kani ento ninu modhati sari chusina aa kshanam naku inka ninna monna la ne anipisthundi.<br><br>
                 Idhi emi thakuva kalam kadu, ala ani netho una samayam naku sariponu ledu, Emo e yedu samavtharalu debbai samavtharalu ayna naku ilane anipisthadi emo.<br><br>
                 Chala telusukunam, chala nerchukunam. Kani prathi godava inko kotha patan nerputhune undi, manaki mana gurinchi teliyani oka kotha vishyani bayta pedthune undi.<br><br>
@@ -106,7 +107,7 @@
                 E valentine's day nunchi ayna ninu badapetakunda undataniki try chestha( adhi avadhu le ani manusulo anukunte naku vinapadadhu anukuntunava 😒)<br><br>
                 Ela ayna e janma ki nanu bharinchi , Na valentine aypothava?
             </p>
-            <p style="font-weight: bold; margin-top: 15px; color: var(--primary-red); font-size: 1.2rem;">itlu ne sandeep rao</p>
+            <p style="font-weight: bold; margin-top: 15px; color: var(--primary-red); font-size: 1.1rem;">itlu ne sandeep rao</p>
         </div>
     </div>
 
@@ -137,17 +138,14 @@
         function showSecret() { document.getElementById('secretModal').style.display = 'flex'; }
         function closeSecret() { document.getElementById('secretModal').style.display = 'none'; }
 
-        // BGM Logic
         let player;
         function onYouTubeIframeAPIReady() {
             player = new YT.Player('yt-player', {
-                height: '1', width: '1',
-                videoId: 'o55BETmPVnE',
+                height: '1', width: '1', videoId: 'o55BETmPVnE',
                 playerVars: { 'autoplay': 0, 'controls': 0, 'loop': 1, 'playlist': 'o55BETmPVnE' },
-                events: { 'onReady': onPlayerReady }
+                events: { 'onReady': (e) => e.target.setVolume(70) }
             });
         }
-        function onPlayerReady(event) { event.target.setVolume(70); }
 
         unlockBtn.addEventListener('click', () => {
             if (pinInput.value === SECRET_PIN) {
@@ -195,25 +193,29 @@
                 bgImage.style.backgroundImage = `url('${step.photo}')`;
                 questionText.innerHTML = step.question;
                 subText.innerHTML = step.sub;
-                yesQuote.innerText = step.yq; // Restored updates
+                yesQuote.innerText = step.yq;
                 noQuote.innerText = step.nq;
                 currentStep++;
-                if (currentStep === 3) { noBtn.style.backgroundColor = "#d90429"; }
             }
         });
 
-        noBtn.addEventListener('mouseover', () => {
+        // FIXED: Runaway logic for both Mouse and Touch
+        const runaway = () => {
             if (currentStep === 3) {
-                const x = Math.random() * (window.innerWidth - 100);
-                const y = Math.random() * (window.innerHeight - 50);
-                noBtn.style.position = 'fixed'; noBtn.style.left = `${x}px`; noBtn.style.top = `${y}px`;
+                const x = Math.random() * (window.innerWidth - 120);
+                const y = Math.random() * (window.innerHeight - 60);
+                noBtn.style.position = 'fixed'; 
+                noBtn.style.left = `${x}px`; 
+                noBtn.style.top = `${y}px`;
             }
-        });
+        };
+
+        noBtn.addEventListener('mouseover', runaway);
+        noBtn.addEventListener('touchstart', (e) => { e.preventDefault(); runaway(); });
 
         yesBtn.addEventListener('click', () => {
-            // Final transition logic
             mainUI.innerHTML = `
-                <h1>Naku telusu hepsiba nenu ante niku pichi! ❤️</h1>
+                <h1 style="font-size: clamp(1.8rem, 7vw, 3.5rem);">Naku telusu hepsiba nenu ante niku pichi! ❤️</h1>
                 <p class="sub-desc">Happy valentines day my Love!</p>
                 <div id="challengeHint" style="opacity:0">Mana 7 years gurinchi oka secret note dachesa, vethuku chudham! 😉</div>
                 <div id="secretHeart" onclick="showSecret()">❤️</div>
@@ -221,12 +223,7 @@
             bgImage.style.backgroundImage = "url('us-final.png')";
             bgImage.style.filter = "brightness(0.45)";
             document.getElementById('particles').style.display = 'none';
-            
-            setTimeout(() => { 
-                const hint = document.getElementById('challengeHint');
-                if(hint) hint.style.opacity = '1'; 
-            }, 8000);
-            
+            setTimeout(() => { const hint = document.getElementById('challengeHint'); if(hint) hint.style.opacity = '1'; }, 8000);
             startHearts();
         });
 
