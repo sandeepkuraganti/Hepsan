@@ -19,7 +19,7 @@
             overflow: hidden;
             background-color: var(--fallback-pink);
             font-family: 'Montserrat', sans-serif;
-            touch-action: manipulation;
+            touch-action: none;
         }
 
         #bg-container { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 1; overflow: hidden; }
@@ -73,9 +73,9 @@
             opacity: 0.2; transition: all 0.5s ease;
             transform: translateX(-50%) scale(1);
         }
-        #secretHeart:hover { opacity: 1; filter: drop-shadow(0 0 8px #fff) drop-shadow(0 0 20px var(--primary-red)); transform: translateX(-50%) scale(1.2); }
+        #secretHeart:hover { opacity: 1; filter: drop-shadow(0 0 8px #fff) drop-shadow(0 0 20px var(--primary-red)); transform: translateX(-50%) scale(1.3); }
         .heart-expand { animation: fullScreenExpand 1.2s forwards ease-in !important; }
-        @keyframes fullScreenExpand { to { transform: translateX(-50%) scale(80); opacity: 1; } }
+        @keyframes fullScreenExpand { to { transform: translateX(-50%) scale(100); opacity: 1; } }
 
         .heart-particle { position: fixed; pointer-events: none; animation: floatUp 4s linear forwards; z-index: 5; }
         @keyframes floatUp { 0% { transform: translateY(100vh) scale(0); opacity: 1; } 100% { transform: translateY(-10vh) scale(2); opacity: 0; } }
@@ -93,8 +93,9 @@
     <div id="loginScreen">
         <div class="login-card">
             <h2 style="font-family: 'Dancing Script';">Gurthunda aa roju, nuvu nenu modatisari kalisam? ❤️</h2>
-            <input type="password" id="pinInput" placeholder="0000" maxlength="4" pattern="\d*">
+            <input type="password" id="pinInput" placeholder="0000" maxlength="4" pattern="\d*" inputmode="numeric">
             <button class="btn" id="unlockBtn" style="background: var(--primary-red); color: white; width: 100%;">Unlock</button>
+            <p id="errorMsg" style="color: #ff4d6d; margin-top: 1rem; display: none;">Wrong PIN, try again ❤️</p>
         </div>
     </div>
 
@@ -136,12 +137,13 @@
         const loginScreen = document.getElementById('loginScreen');
         const pinInput = document.getElementById('pinInput');
         const unlockBtn = document.getElementById('unlockBtn');
+        const errorMsg = document.getElementById('errorMsg');
         const mainUI = document.getElementById('mainUI');
 
         function startExpansion() {
             const heart = document.getElementById('secretHeart');
             heart.classList.add('heart-expand');
-            setTimeout(() => { document.getElementById('secretModal').style.display = 'flex'; heart.classList.remove('heart-expand'); }, 1000);
+            setTimeout(() => { document.getElementById('secretModal').style.display = 'flex'; heart.classList.remove('heart-expand'); }, 1100);
         }
         function closeSecret() { document.getElementById('secretModal').style.display = 'none'; }
 
@@ -149,20 +151,20 @@
         function onYouTubeIframeAPIReady() {
             player = new YT.Player('yt-player', {
                 height: '1', width: '1', videoId: 'o55BETmPVnE',
-                playerVars: { 'autoplay': 0, 'controls': 0, 'loop': 1, 'playlist': 'o55BETmPVnE' },
-                events: { 'onReady': (e) => e.target.setVolume(70) }
+                playerVars: { 'autoplay': 0, 'controls': 0, 'loop': 1, 'playlist': 'o55BETmPVnE', 'mute': 0 },
+                events: { 'onReady': (e) => e.target.setVolume(80) }
             });
         }
 
         unlockBtn.addEventListener('click', () => {
             if (pinInput.value === SECRET_PIN) {
-                if (player) player.playVideo();
+                if (player && typeof player.playVideo === 'function') { player.playVideo(); }
                 loginScreen.style.opacity = '0';
                 setTimeout(() => { loginScreen.style.display = 'none'; mainUI.style.display = 'flex'; }, 800);
-            } else { pinInput.value = ''; alert("Wrong PIN ❤️"); }
+            } else { errorMsg.style.display = 'block'; pinInput.value = ''; }
         });
 
-        const imagesToPreload = ['us-recent.png', 'us-first.png', 'me.png', 'us-final.png'];
+        const imagesToPreload = ['us-main.png', 'us-recent.png', 'us-first.png', 'me.png', 'us-final.png'];
         imagesToPreload.forEach(src => { const img = new Image(); img.src = src; });
 
         function createPetals() {
@@ -194,19 +196,19 @@
             { photo: 'me.png', question: 'Last warning inka!', sub: 'Yes nokkuthava leda! 😤', yq: 'Smart choice!', nq: "Can't catch me!" }
         ];
 
-        // FIXED: The "No" button logic
         const runaway = (e) => {
             if (currentStep === 3) {
-                if(e) e.preventDefault(); 
-                const x = Math.random() * (window.innerWidth - 120);
-                const y = Math.random() * (window.innerHeight - 60);
+                if (e && e.cancelable) e.preventDefault();
+                // Stay within 10% to 90% of screen to avoid flying off
+                const x = Math.random() * (window.innerWidth * 0.8) + (window.innerWidth * 0.1);
+                const y = Math.random() * (window.innerHeight * 0.8) + (window.innerHeight * 0.1);
                 noBtn.style.position = 'fixed'; 
                 noBtn.style.left = `${x}px`; 
                 noBtn.style.top = `${y}px`;
             }
         };
 
-        noBtn.addEventListener('click', () => {
+        noBtn.addEventListener('click', (e) => {
             if (currentStep < 3) {
                 const step = contentSteps[currentStep];
                 bgImage.style.backgroundImage = `url('${step.photo}')`;
@@ -215,11 +217,11 @@
                 yesQuote.innerText = step.yq;
                 noQuote.innerText = step.nq;
                 currentStep++;
-            } else { runaway(); } // Chase mode after 3 steps
+            } else { runaway(e); }
         });
 
         noBtn.addEventListener('mouseover', runaway);
-        noBtn.addEventListener('touchstart', runaway);
+        noBtn.addEventListener('touchstart', runaway, { passive: false });
 
         yesBtn.addEventListener('click', () => {
             mainUI.innerHTML = `
