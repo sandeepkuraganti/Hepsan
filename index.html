@@ -21,33 +21,28 @@
             touch-action: manipulation;
         }
 
-        /* Full-Screen Background with Slow Zoom */
         #bg-container { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 1; overflow: hidden; }
         #bg-image {
             width: 100%; height: 100%;
             background-image: url('us-main.png'); background-size: cover; background-position: center;
-            animation: kenBurns 25s infinite alternate ease-in-out; /* Slower, subtler zoom */
+            animation: kenBurns 25s infinite alternate ease-in-out;
             transition: background-image 1.2s ease-in-out;
         }
         @keyframes kenBurns { 0% { transform: scale(1); } 100% { transform: scale(1.1); } }
 
         .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--overlay-dark); z-index: 2; }
 
-        /* --- NEW: Floating Rose Petals --- */
         #particles { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 3; }
         .petal {
             position: absolute;
-            background: linear-gradient(to bottom right, #ff5e7e, #ffc3a0); /* Soft pink gradient */
-            border-radius: 150% 0 150% 0; /* Petal shape */
+            background: linear-gradient(to bottom right, #ff5e7e, #ffc3a0);
+            border-radius: 150% 0 150% 0;
             opacity: 0.5;
             box-shadow: 0 0 5px rgba(0,0,0,0.2);
             animation: fallRotate linear infinite;
         }
-        @keyframes fallRotate {
-            to { transform: translateY(120vh) rotate(720deg); }
-        }
+        @keyframes fallRotate { to { transform: translateY(120vh) rotate(720deg); } }
 
-        /* Login & UI */
         #loginScreen {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0,0,0,0.95); display: flex; flex-direction: column;
@@ -57,7 +52,8 @@
             background: var(--glass); backdrop-filter: blur(20px); padding: 2.5rem; border-radius: 30px;
             border: 1px solid rgba(255,255,255,0.2); text-align: center; color: white; width: 85%; max-width: 350px;
         }
-        .login-card h2 { font-family: 'Dancing Script', cursive; font-size: 2.2rem; margin-bottom: 1.5rem; }
+        .login-card h2 { font-family: 'Dancing Script', cursive; font-size: clamp(1.5rem, 5vw, 2.2rem); margin-bottom: 1.5rem; line-height: 1.4; }
+        
         input#pinInput {
             width: 100%; padding: 15px; box-sizing: border-box; font-size: 1.5rem; border-radius: 15px; border: none;
             text-align: center; letter-spacing: 10px; margin-bottom: 1.5rem; background: rgba(255,255,255,0.9);
@@ -68,20 +64,15 @@
             flex-direction: column; justify-content: center; align-items: center; text-align: center;
             padding: 20px; color: white;
         }
-        h1 { 
-            font-family: 'Dancing Script', cursive; font-size: clamp(2.5rem, 8vw, 4.5rem); 
-            margin-bottom: 30px; text-shadow: 2px 4px 15px rgba(0,0,0,0.8); line-height: 1.2;
-        }
-        p {font-family: 'Dancing Script', cursive; font-size: clamp(1.5rem, 3vw, 2.5rem); 
-            margin-bottom: 30px; text-shadow: 2px 4px 15px rgba(0,0,0,0.8); line-height: 1.2;
-          }
-        .btn-group { display: flex; gap: 20px; align-items: center; justify-content: center; }
-        .btn {
-            padding: 16px 40px; font-size: 1.1rem; font-weight: 700; border-radius: 60px; border: none; cursor: pointer;
-            transition: all 0.3s; text-transform: uppercase;
-        }
+        h1 { font-family: 'Dancing Script', cursive; font-size: clamp(2.2rem, 8vw, 4.2rem); margin-bottom: 20px; text-shadow: 2px 4px 15px rgba(0,0,0,0.8); line-height: 1.2; }
+        .sub-desc { font-family: 'Dancing Script', cursive; font-size: clamp(1.3rem, 3vw, 2.2rem); margin-bottom: 30px; text-shadow: 2px 4px 15px rgba(0,0,0,0.8); line-height: 1.2; padding: 0 10px; }
+
+        .btn-group { display: flex; gap: 25px; align-items: flex-start; justify-content: center; }
+        .btn-wrapper { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+        .btn { padding: 16px 40px; font-size: 1.1rem; font-weight: 700; border-radius: 60px; border: none; cursor: pointer; transition: all 0.3s; text-transform: uppercase; }
         #yesBtn { background: var(--primary-red); color: white; box-shadow: 0 10px 20px rgba(217, 4, 41, 0.4); }
         #noBtn { background: white; color: #333; position: relative; }
+        .btn-quote { font-size: 0.85rem; opacity: 0.8; font-style: italic; min-height: 1.2rem; }
 
         #smartPopup {
             display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
@@ -100,23 +91,27 @@
 
     <div id="loginScreen">
         <div class="login-card">
-            <h2>Gurthunda aa roju, nuvu nenu modatisari kalisam? ❤️
-            Niku gurthuntene idhi open avthundi</h2>
-            
+            <h2>Gurthunda aa roju, nuvu nenu modatisari kalisam? ❤️<br>Niku gurthuntene idhi open avthundi</h2>
             <input type="password" id="pinInput" placeholder="0000" maxlength="4" pattern="\d*">
             <button class="btn" id="unlockBtn" style="background: var(--primary-red); color: white; width: 100%;">Unlock</button>
             <p id="errorMsg" style="color: #ff4d6d; margin-top: 1rem; display: none;">Wrong PIN, try again ❤️</p>
         </div>
     </div>
 
-    <div id="smartPopup">Dont act smart! <br> You only have one option, and that is YES! 😉</div>
+    <div id="smartPopup">Dont act smart! <br> You only have option that is YES! 😉</div>
 
     <div class="ui-layer" id="mainUI">
         <h1 id="question">Hey Hepsiba,<br>Will you be my Valentine?</h1>
-        <p>No press chese antha dhairyam niku ledu ani naku telusu, so musukuni yes nokkesey</p>
+        <p class="sub-desc" id="subText">No press chese antha dhairyam niku ledu ani naku telusu, so musukuni yes nokkesey</p>
         <div class="btn-group">
-            <button class="btn" id="yesBtn">Yes!</button>
-            <button class="btn" id="noBtn">No</button>
+            <div class="btn-wrapper">
+                <button class="btn" id="yesBtn">Yes!</button>
+                <span class="btn-quote" id="yesQuote">The easiest choice.</span>
+            </div>
+            <div class="btn-wrapper">
+                <button class="btn" id="noBtn">No</button>
+                <span class="btn-quote" id="noQuote">I dare you to try.</span>
+            </div>
         </div>
     </div>
 
@@ -128,52 +123,44 @@
         const errorMsg = document.getElementById('errorMsg');
         const mainUI = document.getElementById('mainUI');
 
-        // --- NEW: Petal Animation System ---
         function createPetals() {
             const particles = document.getElementById('particles');
-            for(let i=0; i<30; i++) { // Fewer particles for a cleaner look
+            for(let i=0; i<30; i++) {
                 const petal = document.createElement('div');
                 petal.className = 'petal';
-                // Random size variations
                 const size = Math.random() * 15 + 10 + 'px';
-                petal.style.width = size;
-                petal.style.height = size;
-                // Random start position
+                petal.style.width = size; petal.style.height = size;
                 petal.style.left = Math.random() * 100 + 'vw';
-                // Random fall speed and rotation speed
                 const duration = Math.random() * 10 + 8 + 's';
                 petal.style.animationDuration = duration;
-                // Random delay so they don't all start at once
                 petal.style.animationDelay = Math.random() * 5 + 's';
                 particles.appendChild(petal);
             }
         }
         createPetals();
 
-        // Login Logic
         unlockBtn.addEventListener('click', () => {
             if (pinInput.value === SECRET_PIN) {
                 loginScreen.style.opacity = '0';
                 setTimeout(() => { loginScreen.style.display = 'none'; mainUI.style.display = 'flex'; }, 800);
-            } else {
-                errorMsg.style.display = 'block';
-                pinInput.value = '';
-            }
+            } else { errorMsg.style.display = 'block'; pinInput.value = ''; }
         });
 
-        // Journey Logic
         let currentStep = 0;
         let noAvoidCount = 0;
         const noBtn = document.getElementById('noBtn');
         const yesBtn = document.getElementById('yesBtn');
         const bgImage = document.getElementById('bg-image');
         const questionText = document.getElementById('question');
+        const subText = document.getElementById('subText');
+        const yesQuote = document.getElementById('yesQuote');
+        const noQuote = document.getElementById('noQuote');
         const popup = document.getElementById('smartPopup');
 
         const contentSteps = [
-            { photo: 'us-recent.jpg', question: 'Are you serious, Hepsiba? Niku na valentine avvali ani leda? chesina show chalu kani ippatiki ayna musukoni yes nokku 😢' },
-            { photo: 'us-first.jpg', question: 'Still no? vukuntuna ani rechipothunava? chodu mana first photo 7+ years nunchi ne venake tiruguthuna kada ayna jali leda na mida! ipudu ayna aa yes nokesey, em anakunda vadilestha ❤️' },
-            { photo: 'me.jpg', question: ' aa chaala ekkuva chesthunav Last warning inka! Yes nokkuthava leda! 😤' }
+            { photo: 'us-recent.jpg', question: 'Are you serious, Hepsiba?', sub: 'Niku na valentine avvali ani leda? chesina show chalu kani ippatiki ayna musukoni yes nokku 😢', yq: 'Much better!', nq: 'Getting harder?' },
+            { photo: 'us-first.jpg', question: 'Still no?', sub: 'vukuntuna ani rechipothunava? chodu mana first photo 7+ years nunchi ne venake tiruguthuna kada ayna jali leda na mida! ipudu ayna aa yes nokesey ❤️', yq: 'Finally!', nq: 'Rethink 7 years?' },
+            { photo: 'me.jpg', question: 'Enough is enough!', sub: 'aa chaala ekkuva chesthunav Last warning inka! Yes nokkuthava leda! 😤', yq: 'Smart choice!', nq: "Can't catch me!" }
         ];
 
         noBtn.addEventListener('click', () => {
@@ -181,6 +168,9 @@
                 const step = contentSteps[currentStep];
                 bgImage.style.backgroundImage = `url('${step.photo}')`;
                 questionText.innerHTML = step.question;
+                subText.innerHTML = step.sub;
+                yesQuote.innerText = step.yq;
+                noQuote.innerText = step.nq;
                 currentStep++;
                 if (currentStep === 3) { noBtn.style.backgroundColor = "#d90429"; noBtn.style.color = "white"; }
             }
@@ -195,9 +185,7 @@
                 }
                 const x = Math.random() * (window.innerWidth - noBtn.offsetWidth - 40) + 20;
                 const y = Math.random() * (window.innerHeight - noBtn.offsetHeight - 40) + 20;
-                noBtn.style.position = 'fixed';
-                noBtn.style.left = `${x}px`;
-                noBtn.style.top = `${y}px`;
+                noBtn.style.position = 'fixed'; noBtn.style.left = `${x}px`; noBtn.style.top = `${y}px`;
             }
         };
 
@@ -205,10 +193,9 @@
         noBtn.addEventListener('touchstart', moveButton);
 
         yesBtn.addEventListener('click', () => {
-            mainUI.innerHTML = `<h1 style="font-size: 5rem;">Naku telusu hepsiba nenu ante niku pichi, nv yes nokkesthav ani! ❤️</h1><p style="font-size: 1.5rem; font-weight: bold;">Happy valentines day my Love, I Love You!</p>`;
+            mainUI.innerHTML = `<h1 style="font-size: 4rem;">Naku telusu hepsiba nenu ante niku pichi! ❤️</h1><p class="sub-desc">Happy valentines day my Love, I Love You!</p>`;
             bgImage.style.backgroundImage = "url('us-final.jpg')";
             bgImage.style.filter = "brightness(0.5)";
-            // Remove petals on final screen so hearts can take over
             document.getElementById('particles').style.display = 'none';
             startHearts();
         });
